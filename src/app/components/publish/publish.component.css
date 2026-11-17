@@ -1,0 +1,7 @@
+:host {
+  display: block;
+}
+
+.mono-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.06em; color: #6c7a6e; }
+.qty-field { width: 150px; }
+.publish-button { padding: 0 28px; }
