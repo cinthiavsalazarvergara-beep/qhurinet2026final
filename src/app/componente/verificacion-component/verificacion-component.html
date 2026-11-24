@@ -1,0 +1,12 @@
+<div class="titulo">Verificación</div>
+<div class="texto">{{ aprobados() }} documentos aprobados. La validación es automática y te da prioridad en anuncios nuevos.</div>
+<div class="lista">
+  @for (d of documentos; track d.id) {
+    <div class="documento" [class.aprobado]="d.state === 'Aprobado'">
+      <div class="punto"></div>
+      <div class="nombre">{{ d.name }}</div>
+      <div class="estado">{{ d.state.toUpperCase() }}</div>
+    </div>
+  }
+</div>
+<button type="button" class="flow-button ver" (click)="abrir.emit()">Ver y subir documentos</button>

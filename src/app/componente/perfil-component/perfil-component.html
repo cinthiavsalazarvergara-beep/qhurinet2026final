@@ -1,0 +1,64 @@
+<div class="pantalla">
+  <div class="columna">
+    <div class="tarjeta identidad">
+      <div class="identidad-fila">
+        @if (perfil.photo) {
+          <img [src]="perfil.photo" alt="Foto de perfil" class="avatar" />
+        } @else {
+          <div class="avatar avatar-inicial">{{ inicial() }}</div>
+        }
+        <div>
+          <div class="nombre">{{ perfil.name }}</div>
+          <div class="rol">{{ lineaRol() }}</div>
+          <div class="sello">{{ verificado() }}</div>
+        </div>
+      </div>
+      @if (perfil.bio) { <div class="bio">{{ perfil.bio }}</div> }
+      <div class="datos">
+        <div class="dato"><div class="gris">Correo</div><div>{{ perfil.email }}</div></div>
+        <div class="dato"><div class="gris">Teléfono</div><div class="mono">{{ perfil.phone }}</div></div>
+        <div class="dato"><div class="gris">Materiales</div><div class="derecha">{{ materiales() }}</div></div>
+        <div class="dato centrado">
+          <div class="gris">Visibilidad</div>
+          <button type="button" class="visibilidad" [class.oculta]="!disponible" (click)="toggleDisponible()" [attr.aria-pressed]="disponible" title="Cambiar visibilidad">{{ visibilidad() }}</button>
+        </div>
+      </div>
+      <div class="pista">{{ pistaVisibilidad() }}</div>
+      @if (error) { <div role="alert" class="error">{{ error }}</div> }
+      <div class="botones">
+        <button type="button" class="flow-button editar" (click)="editarAbierto = true">Editar perfil</button>
+        <button type="button" class="flow-button documentos" (click)="documentosAbierto = true">Documentos</button>
+      </div>
+      <div class="salir"><button type="button" class="cerrar-sesion" (click)="logout()">Cerrar sesión</button></div>
+    </div>
+
+    <app-metodos-pago-component [metodos]="metodos" (usar)="usarMetodo($event)" (agregar)="pagoAbierto = true" />
+  </div>
+
+  <div class="columna">
+    <app-historial-component [historial]="historial" (exportar)="exportar($event)" />
+
+    <div class="dos-columnas">
+      <div class="tarjeta valoraciones">
+        <div class="subtitulo">Valoraciones recibidas</div>
+        <div class="rating-fila">
+          <div class="rating">{{ rating() }}</div>
+          <div class="gris-pequeno">de {{ historial.length }} entregas</div>
+        </div>
+        <div class="nota">Tu valoración promedio se calcula con las calificaciones que te dejan en cada entrega completada.</div>
+      </div>
+
+      <app-verificacion-component [documentos]="documentos" (abrir)="documentosAbierto = true" />
+    </div>
+  </div>
+</div>
+
+@if (editarAbierto) {
+  <app-editar-perfil-dialog-component [perfil]="perfil" [esGenerador]="esGenerador" [categorias]="categorias" (guardado)="onPerfilGuardado($event)" (cerrar)="editarAbierto = false" />
+}
+@if (documentosAbierto) {
+  <app-documentos-dialog-component [documentos]="documentos" (cerrar)="documentosAbierto = false" />
+}
+@if (pagoAbierto) {
+  <app-metodo-pago-dialog-component [metodos]="datos?.metodosPago ?? []" (guardado)="onPerfilGuardado($event)" (cerrar)="pagoAbierto = false" />
+}

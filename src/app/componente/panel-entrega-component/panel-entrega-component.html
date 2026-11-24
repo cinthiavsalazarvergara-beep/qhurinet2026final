@@ -1,0 +1,54 @@
+<div>
+  <div class="kicker">ENTREGA EN CURSO</div>
+  <div class="kg">{{ entrega?.kg }}</div>
+  <div class="detalle">{{ entrega?.material }} · {{ entrega?.window }}</div>
+</div>
+@if (puedeSeguir) {
+  <button type="button" class="flow-button flow-primary" (click)="seguir.emit()">Seguir recolector</button>
+}
+@if (puedeMostrarCodigo) {
+  <div class="caja">
+    <div class="caja-titulo">Código de entrega</div>
+    <div class="caja-texto separado">Díctaselo al reciclador solo cuando recoja el material.</div>
+    @if (codigo) {
+      <div aria-label="Código de entrega" class="codigo">{{ codigo }}</div>
+    } @else {
+      <button type="button" class="flow-button" (click)="mostrarCodigo.emit()">Mostrar código</button>
+    }
+  </div>
+}
+@if (puedeEscanear) {
+  <div class="caja">
+    <div class="caja-titulo">Confirmación por QR</div>
+    <div class="caja-texto">El generador te dicta su código al momento del recojo.</div>
+    <div class="qr">
+      <svg viewBox="0 0 60 60">
+        <rect x="4" y="4" width="16" height="16" fill="none" stroke="currentColor" stroke-width="4"></rect>
+        <rect x="40" y="4" width="16" height="16" fill="none" stroke="currentColor" stroke-width="4"></rect>
+        <rect x="4" y="40" width="16" height="16" fill="none" stroke="currentColor" stroke-width="4"></rect>
+        <rect x="28" y="28" width="6" height="6" fill="currentColor"></rect>
+        <rect x="40" y="28" width="6" height="6" fill="currentColor"></rect>
+        <rect x="52" y="28" width="4" height="6" fill="currentColor"></rect>
+        <rect x="28" y="40" width="6" height="6" fill="currentColor"></rect>
+        <rect x="40" y="46" width="6" height="6" fill="currentColor"></rect>
+        <rect x="28" y="16" width="6" height="6" fill="currentColor"></rect>
+        <rect x="16" y="28" width="6" height="6" fill="currentColor"></rect>
+        <rect x="4" y="28" width="6" height="6" fill="currentColor"></rect>
+      </svg>
+    </div>
+    <button type="button" class="boton-qr" (click)="escanear.emit()">Ingresar código de entrega</button>
+  </div>
+}
+<div>
+  <div class="kicker">CONTRAPARTE</div>
+  <div class="contraparte">
+    @if (contraparte) {
+      <div class="fila"><div>Valoración</div><div class="mono">{{ contraparte.rating }}</div></div>
+      <div class="fila"><div>Entregas</div><div class="mono">{{ contraparte.deliveries }}</div></div>
+      <div class="fila"><div>Verificado</div><div class="verificado">{{ contraparte.verified }}</div></div>
+    } @else {
+      <div class="cargando">Cargando…</div>
+    }
+  </div>
+</div>
+<button type="button" class="reportar" (click)="reportar.emit()">Reportar un problema</button>

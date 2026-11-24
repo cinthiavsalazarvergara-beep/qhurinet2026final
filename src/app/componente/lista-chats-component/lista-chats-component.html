@@ -1,0 +1,16 @@
+@if (!hilos.length) {
+  <div role="status" class="vacio">Aún no tienes conversaciones. Se crean cuando un reciclador reclama un anuncio.</div>
+}
+@for (t of hilos; track t.id) {
+  <button type="button" class="hilo" [class.activo]="activo === t.id" (click)="seleccionar.emit(t.id)">
+    <div class="iniciales">{{ t.initials }}</div>
+    <div class="cuerpo">
+      <div class="fila">
+        <div class="nombre">{{ t.name }}</div>
+        <div class="hora">{{ t.time }}</div>
+      </div>
+      <div class="vista-previa">{{ t.preview }}</div>
+      <div class="etiqueta">{{ t.tag }}</div>
+    </div>
+  </button>
+}

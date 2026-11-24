@@ -1,0 +1,40 @@
+.cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.vacio {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.ruta {
+  border: 1px solid #e2e5dc;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.nombre {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.descripcion {
+  font-size: 12px;
+  color: #5d6b5f;
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+.meta {
+  font: 11px 'IBM Plex Mono', monospace;
+  margin-top: 12px;
+  line-height: 1.8;
+}
+
+.botones {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}

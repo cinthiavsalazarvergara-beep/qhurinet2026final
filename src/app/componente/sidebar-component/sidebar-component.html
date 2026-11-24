@@ -1,0 +1,25 @@
+<div class="rail">
+  <app-logo-component />
+
+  <nav class="nav">
+    @for (n of items; track n.tab) {
+      <a class="nav-item" [routerLink]="['/app', n.tab]" routerLinkActive="active">
+        <span class="nav-icon"><app-icono-component [nombre]="n.tab" /></span>
+        <span class="nav-label">{{ n.label }}</span>
+      </a>
+    }
+  </nav>
+
+  <div class="spacer"></div>
+
+  <div class="mode" role="status" aria-label="Tu rol en QhuriNet">
+    <div class="mode-top">MODO</div>
+    <div class="mode-val">{{ modo }}</div>
+  </div>
+
+  @if (foto) {
+    <img class="avatar" [src]="foto" alt="Foto de perfil" />
+  } @else {
+    <div class="avatar-initial" aria-label="Iniciales del perfil">{{ inicial }}</div>
+  }
+</div>

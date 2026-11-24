@@ -1,0 +1,20 @@
+<div class="flow-overlay">
+  <form class="flow-dialog" [formGroup]="form" cdkTrapFocus [cdkTrapFocusAutoCapture]="true" role="dialog" aria-modal="true" [attr.aria-label]="titulo()" (keydown.escape)="cerrar.emit()" (ngSubmit)="confirmar()">
+    <div class="cabecera"><span class="titulo">{{ titulo() }}</span><button type="button" class="flow-button" aria-label="Cerrar diálogo" (click)="cerrar.emit()">×</button></div>
+    <div class="detalle">{{ entrega.material }} · {{ entrega.kg }}<br />{{ entrega.person }}<br /><span class="gris">Ventana actual: {{ entrega.window }}</span></div>
+    @if (tipo !== 'cancelar') {
+      <label class="etiqueta">{{ tipo === 'coordinar' ? 'Fecha acordada' : 'Nueva fecha' }}<input class="flow-field" type="date" aria-label="Fecha acordada" [min]="hoy" formControlName="fecha" (input)="error = ''" /></label>
+      <label class="etiqueta">Franja horaria
+        <select class="flow-field" aria-label="Franja horaria" formControlName="franja">
+          @for (t of franjas; track t.value) { <option [value]="t.value">{{ t.label }}</option> }
+        </select>
+      </label>
+    } @else {
+      <div class="texto">¿Confirmas que deseas cancelar esta recolección? El motivo quedará visible en la fila.</div>
+      <label class="etiqueta">Motivo de cancelación<textarea class="flow-field" aria-label="Motivo de cancelación" formControlName="motivo" (input)="error = ''" maxlength="240" rows="3" placeholder="Indica por qué necesitas cancelarla"></textarea></label>
+    }
+    @if (bloqueada()) { <div role="status" class="aviso">Esta recolección ya está cerrada y no admite cambios de fecha ni cancelación.</div> }
+    @if (error) { <div role="alert" class="error">{{ error }}</div> }
+    <div class="botones"><button type="submit" class="flow-button flow-primary" [disabled]="bloqueada()">Confirmar</button><button type="button" class="flow-button" (click)="cerrar.emit()">Volver</button></div>
+  </form>
+</div>

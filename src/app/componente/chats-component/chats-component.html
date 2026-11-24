@@ -1,0 +1,43 @@
+<app-lista-chats-component [hilos]="hilos" [activo]="hiloActivo?.id ?? ''" (seleccionar)="seleccionar($event)" />
+
+<div class="conversacion">
+  <div class="cabecera">
+    <div class="avatar">{{ hiloActivo?.initials }}</div>
+    <div class="titulo">
+      <div class="nombre">{{ hiloActivo?.name }}</div>
+      <div class="subtitulo">{{ subtitulo() }}</div>
+    </div>
+    <div class="ver-anuncio">Ver anuncio</div>
+  </div>
+
+  <div class="mensajes">
+    <div class="hoy">HOY</div>
+    @for (msg of mensajes; track msg.id) {
+      <div class="mensaje" [class.mio]="msg.mio">
+        <div class="texto">{{ msg.texto }}</div>
+        <div class="hora">{{ msg.hora }}</div>
+      </div>
+    }
+    @if (error) { <div role="alert" class="error">{{ error }}</div> }
+  </div>
+
+  <form class="redactar" [formGroup]="form" (ngSubmit)="enviar()">
+    <input type="text" placeholder="Escribe un mensaje" aria-label="Escribe un mensaje" formControlName="texto" class="campo" />
+    <button type="submit" class="enviar">Enviar</button>
+  </form>
+</div>
+
+<app-panel-entrega-component
+  [entrega]="entrega" [contraparte]="contraparte" [puedeSeguir]="puedeSeguir()" [puedeMostrarCodigo]="puedeMostrarCodigo()"
+  [puedeEscanear]="puedeEscanear()" [codigo]="codigo"
+  (seguir)="entregaSeguimiento = entrega" (mostrarCodigo)="mostrarCodigo()" (escanear)="abrirEscaner()" (reportar)="irSoporte()" />
+
+@if (entregaEscaner) {
+  <app-escaner-dialog-component [entrega]="entregaEscaner" (confirmado)="onConfirmado($event)" (cerrar)="entregaEscaner = null" />
+}
+@if (entregaSeguimiento) {
+  <app-seguimiento-dialog-component [entrega]="entregaSeguimiento" (cerrar)="entregaSeguimiento = null" />
+}
+@if (entregaConfirmada) {
+  <app-valorar-dialog-component [entrega]="entregaConfirmada" [esGenerador]="esGenerador" (cerrar)="entregaConfirmada = null" />
+}

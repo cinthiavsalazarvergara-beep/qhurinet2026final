@@ -1,0 +1,15 @@
+<div class="titulo">Métodos de pago</div>
+<div class="lista">
+  @for (m of metodos; track m.id) {
+    <div class="metodo">
+      <div class="sello" [style.background]="m.bg" [style.color]="m.fg">{{ m.label }}</div>
+      <div class="detalle">{{ m.detail }}</div>
+      @if (m.isDefault) { <div class="predeterminado">Predeterminado</div> }
+      @if (m.canUse) { <button type="button" class="usar" (click)="usar.emit(m.id)">Usar</button> }
+    </div>
+  }
+  <button type="button" class="agregar" (click)="agregar.emit()">
+    <div class="sello-vacio">+</div>
+    <div class="agregar-texto">Agregar método</div>
+  </button>
+</div>

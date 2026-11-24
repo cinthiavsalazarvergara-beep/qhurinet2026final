@@ -1,0 +1,62 @@
+:host {
+  display: block;
+  background: #ffffff;
+  border: 1px solid #e2e5dc;
+  border-radius: 14px;
+  padding: 22px 24px;
+}
+
+.cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.titulo {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.botones {
+  display: flex;
+  gap: 8px;
+}
+
+.exportar {
+  background: #ffffff;
+  border: 1px solid #d8dcd2;
+  border-radius: 7px;
+  padding: 7px 13px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.tabla {
+  width: 100%;
+  margin-top: 6px;
+  --mat-table-background-color: #ffffff;
+  --mat-table-header-headline-font: 'IBM Plex Mono', monospace;
+  --mat-table-header-headline-size: 10px;
+  --mat-table-header-headline-tracking: 0.06em;
+  --mat-table-header-headline-color: #6c7a6e;
+  --mat-table-row-item-label-text-font: 'IBM Plex Sans', Helvetica, sans-serif;
+  --mat-table-row-item-label-text-size: 12.5px;
+  --mat-table-row-item-label-text-tracking: 0;
+  --mat-table-row-item-outline-color: #eceee7;
+}
+
+.negrita {
+  font-weight: 600;
+}
+
+.fecha {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #5d6b5f;
+}
+
+.mono {
+  font-family: 'IBM Plex Mono', monospace;
+}

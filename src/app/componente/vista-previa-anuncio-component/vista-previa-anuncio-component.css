@@ -1,0 +1,155 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.tarjeta {
+  background: #ffffff;
+  border: 1px solid #e2e5dc;
+  border-radius: 14px;
+  padding: 20px;
+}
+
+.tarjeta.sin-relleno {
+  padding: 0;
+  overflow: hidden;
+}
+
+.mapa {
+  height: 190px;
+  position: relative;
+  background: #e7ebe1;
+}
+
+.lienzo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.ubicacion {
+  position: absolute;
+  left: 42.5%;
+  top: 54%;
+  transform: translate(-50%, -100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ubicacion-etiqueta {
+  background: #16281f;
+  color: #a3d24a;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  padding: 4px 9px;
+  border-radius: 5px;
+}
+
+.ubicacion-palo {
+  width: 2px;
+  height: 12px;
+  background: #16281f;
+}
+
+.ajustar {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  background: #ffffff;
+  border: 1px solid #e2e5dc;
+  border-radius: 7px;
+  padding: 7px 12px;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.direccion {
+  padding: 16px 18px;
+}
+
+.kicker {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #6c7a6e;
+}
+
+.direccion-texto {
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 7px;
+}
+
+.direccion-distrito {
+  font-size: 11.5px;
+  color: #5d6b5f;
+  margin-top: 3px;
+}
+
+.anuncio {
+  border: 1px solid #16281f;
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 14px;
+  box-shadow: 0 2px 0 #16281f;
+}
+
+.anuncio-fila {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.icono-material {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icono-23 {
+  width: 23px;
+  height: 23px;
+}
+
+.anuncio-cuerpo {
+  flex: 1;
+}
+
+.kg-fila {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.kg {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.material {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.lugar {
+  font-size: 11.5px;
+  color: #5d6b5f;
+  margin-top: 4px;
+}
+
+.datos {
+  display: flex;
+  gap: 12px;
+  margin-top: 9px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+}

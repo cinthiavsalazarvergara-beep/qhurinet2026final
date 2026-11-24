@@ -1,0 +1,25 @@
+<div class="flow-overlay">
+  <div class="dialogo" cdkTrapFocus [cdkTrapFocusAutoCapture]="true" role="dialog" aria-modal="true" aria-label="Entrega confirmada" (keydown.escape)="cerrar.emit()">
+    <div class="kicker">ENTREGA CONFIRMADA</div>
+    <div class="titulo">{{ titulo() }}</div>
+    <div class="subtitulo">{{ esGenerador ? '¿Cómo fue tu experiencia con ' + entrega.person + '?' : 'Entrega registrada con ' + entrega.person + '.' }}</div>
+    @if (esGenerador) {
+      <form [formGroup]="form" (ngSubmit)="enviar()">
+        <div class="estrellas">
+          @for (n of estrellas; track n) {
+            <button type="button" class="estrella" [class.marcada]="rating >= n" [attr.aria-label]="'Calificar con ' + n" (click)="setRating(n)">{{ n }}</button>
+          }
+        </div>
+        <textarea aria-label="Comentario" placeholder="Comentario (opcional)" formControlName="comentario" maxlength="240" class="comentario"></textarea>
+        @if (error) { <div role="alert" class="error">{{ error }}</div> }
+        <div class="botones">
+          <button type="submit" class="enviar" [disabled]="rating === 0">Enviar valoración</button>
+          <button type="button" class="despues" (click)="cerrar.emit()">Después</button>
+        </div>
+      </form>
+    } @else {
+      <div class="registrada">Registramos la entrega. El generador podrá valorar tu servicio.</div>
+      <button type="button" class="enviar ancho" (click)="cerrar.emit()">Listo</button>
+    }
+  </div>
+</div>

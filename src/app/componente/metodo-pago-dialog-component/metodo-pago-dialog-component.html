@@ -1,0 +1,23 @@
+<div class="flow-overlay">
+  <form class="flow-dialog" [formGroup]="form" cdkTrapFocus [cdkTrapFocusAutoCapture]="true" role="dialog" aria-modal="true" aria-label="Agregar método de pago" (keydown.escape)="cerrar.emit()" (ngSubmit)="guardar()">
+    <div class="cabecera"><span class="titulo">Agregar método de pago</span><button type="button" class="flow-button" aria-label="Cerrar diálogo" (click)="cerrar.emit()">×</button></div>
+    <div>
+      <div class="flow-heading">MEDIO</div>
+      <div role="radiogroup" aria-label="Medio de pago" class="tipos">
+        @for (k of tipos; track k.key) {
+          <button type="button" role="radio" class="tipo" [class.activo]="tipo === k.key" [attr.aria-checked]="tipo === k.key" (click)="seleccionar(k.key)">{{ k.label }}</button>
+        }
+      </div>
+    </div>
+    @if (info().field) {
+      <label class="etiqueta">{{ info().field }}<input class="flow-field" [attr.aria-label]="info().field" formControlName="dato" (input)="error = ''" [placeholder]="info().placeholder" maxlength="40" /></label>
+    } @else {
+      <div class="texto">El pago en efectivo se acuerda en el chat y se entrega al momento del recojo.</div>
+    }
+    <button type="button" role="checkbox" class="casilla" [attr.aria-checked]="predeterminado" (click)="predeterminado = !predeterminado">
+      <span class="marca" [class.marcada]="predeterminado">{{ predeterminado ? '✓' : '' }}</span>Usar como método predeterminado
+    </button>
+    @if (error) { <div role="alert" class="error">{{ error }}</div> }
+    <div class="botones"><button type="submit" class="flow-button flow-primary">Guardar método</button><button type="button" class="flow-button" (click)="cerrar.emit()">Cancelar</button></div>
+  </form>
+</div>

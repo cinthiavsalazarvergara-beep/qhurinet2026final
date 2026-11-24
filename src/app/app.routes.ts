@@ -1,36 +1,38 @@
 import { Routes } from '@angular/router';
-import { authGuard, roleGuard } from './services/auth.guard';
-import { AuthLayoutComponent } from './components/auth/auth-layout/auth-layout.component';
-import { AuthFormComponent } from './components/auth/auth-form/auth-form.component';
-import { VerifyEmailComponent } from './components/auth/verify-email/verify-email.component';
-import { ConsoleShellComponent } from './components/console/console-shell/console-shell.component';
+import { AuthGuard } from './guards/auth-guard';
+import { RolGuard } from './guards/rol-guard';
+import { AccesoLayoutComponent } from './componente/acceso-layout-component/acceso-layout-component';
+import { AccesoComponent } from './componente/acceso-component/acceso-component';
+import { VerificarCorreoComponent } from './componente/verificar-correo-component/verificar-correo-component';
+import { ConsolaComponent } from './componente/consola-component/consola-component';
 
-// Las pantallas de /app se cargan de forma diferida (loadComponent): el Mapa,
-// Recojos, etc. sólo se descargan al navegar a su ruta, aligerando el bundle inicial.
+// AuthGuard protege toda la consola (/app); RolGuard deja pasar solo al rol de `data.rol`.
+// Las pantallas de /app se cargan de forma diferida (loadComponent): cargarlas todas al
+// inicio supera el presupuesto de 1 MB del bundle inicial definido en angular.json.
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   {
     path: '',
-    component: AuthLayoutComponent,
+    component: AccesoLayoutComponent,
     children: [
-      { path: 'login', component: AuthFormComponent, data: { mode: 'login' }, title: 'Iniciar sesión · QhuriNet' },
-      { path: 'registro', component: AuthFormComponent, data: { mode: 'register' }, title: 'Crear cuenta · QhuriNet' },
+      { path: 'login', component: AccesoComponent, data: { mode: 'login' }, title: 'Iniciar sesión · QhuriNet' },
+      { path: 'registro', component: AccesoComponent, data: { mode: 'register' }, title: 'Crear cuenta · QhuriNet' },
     ],
   },
-  { path: 'verify-email', component: VerifyEmailComponent, title: 'Confirmar correo · QhuriNet' },
+  { path: 'verify-email', component: VerificarCorreoComponent, title: 'Confirmar correo · QhuriNet' },
   {
     path: 'app',
-    component: ConsoleShellComponent,
-    canActivate: [authGuard],
+    component: ConsolaComponent,
+    canActivate: [AuthGuard],
     children: [
       { path: '', redirectTo: 'mapa', pathMatch: 'full' },
-      { path: 'mapa', canActivate: [roleGuard('reciclador')], loadComponent: () => import('./components/map/map.component').then((m) => m.MapComponent), data: { tab: 'mapa' }, title: 'Mapa · QhuriNet' },
-      { path: 'recojos', canActivate: [roleGuard('reciclador')], loadComponent: () => import('./components/pickups/pickups.component').then((m) => m.PickupsComponent), data: { tab: 'recojos' }, title: 'Recojos · QhuriNet' },
-      { path: 'publicar', canActivate: [roleGuard('generador')], loadComponent: () => import('./components/publish/publish.component').then((m) => m.PublishComponent), data: { tab: 'publicar' }, title: 'Publicar · QhuriNet' },
-      { path: 'publicaciones', canActivate: [roleGuard('generador')], loadComponent: () => import('./components/publications/publications.component').then((m) => m.PublicationsComponent), data: { tab: 'publicaciones' }, title: 'Anuncios · QhuriNet' },
-      { path: 'chats', loadComponent: () => import('./components/chats/chats.component').then((m) => m.ChatsComponent), data: { tab: 'chats' }, title: 'Chats · QhuriNet' },
-      { path: 'perfil', loadComponent: () => import('./components/profile/profile.component').then((m) => m.ProfileComponent), data: { tab: 'perfil' }, title: 'Perfil · QhuriNet' },
-      { path: 'soporte', loadComponent: () => import('./components/support/support.component').then((m) => m.SupportComponent), data: { tab: 'soporte' }, title: 'Soporte · QhuriNet' },
+      { path: 'mapa', loadComponent: () => import('./componente/mapa-component/mapa-component').then((m) => m.MapaComponent), canActivate: [RolGuard], data: { tab: 'mapa', rol: 'reciclador' }, title: 'Mapa · QhuriNet' },
+      { path: 'recojos', loadComponent: () => import('./componente/recojos-component/recojos-component').then((m) => m.RecojosComponent), canActivate: [RolGuard], data: { tab: 'recojos', rol: 'reciclador' }, title: 'Recojos · QhuriNet' },
+      { path: 'publicar', loadComponent: () => import('./componente/publicar-component/publicar-component').then((m) => m.PublicarComponent), canActivate: [RolGuard], data: { tab: 'publicar', rol: 'generador' }, title: 'Publicar · QhuriNet' },
+      { path: 'publicaciones', loadComponent: () => import('./componente/publicaciones-component/publicaciones-component').then((m) => m.PublicacionesComponent), canActivate: [RolGuard], data: { tab: 'publicaciones', rol: 'generador' }, title: 'Anuncios · QhuriNet' },
+      { path: 'chats', loadComponent: () => import('./componente/chats-component/chats-component').then((m) => m.ChatsComponent), data: { tab: 'chats' }, title: 'Chats · QhuriNet' },
+      { path: 'perfil', loadComponent: () => import('./componente/perfil-component/perfil-component').then((m) => m.PerfilComponent), data: { tab: 'perfil' }, title: 'Perfil · QhuriNet' },
+      { path: 'soporte', loadComponent: () => import('./componente/soporte-component/soporte-component').then((m) => m.SoporteComponent), data: { tab: 'soporte' }, title: 'Soporte · QhuriNet' },
     ],
   },
   { path: '**', redirectTo: 'login' },

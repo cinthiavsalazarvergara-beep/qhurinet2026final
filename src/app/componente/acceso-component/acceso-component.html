@@ -1,0 +1,115 @@
+<form class="auth-card" [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div>
+    <div class="flow-heading">{{ encabezado() }}</div>
+    <div class="auth-card-title">{{ titulo() }}</div>
+    <div class="auth-card-subtitle">{{ subtitulo() }}</div>
+  </div>
+
+  @if (esRegistro()) {
+    <div>
+      <div class="account-label">TIPO DE CUENTA</div>
+      <div role="radiogroup" aria-label="Tipo de cuenta" class="account-grid">
+        @for (card of cuentas; track card.key) {
+          <button type="button" class="flow-button account-card" role="radio" [class.selected]="cuenta === card.key" [attr.aria-checked]="cuenta === card.key" (click)="elegirCuenta(card.key)">
+            <span class="account-card-icon">
+              <span class="account-card-glyph">
+                @switch (card.key) {
+                  @case ('ciudadano') {
+                    <svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="1.8">
+                      <circle cx="12" cy="8.5" r="4" />
+                      <path d="M4.5 20 C5.5 15.5 8.5 14 12 14 C15.5 14 18.5 15.5 19.5 20" />
+                    </svg>
+                  }
+                  @case ('bodega') {
+                    <svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M4 10 H20 L18 5 H6 Z M5 10 V20 H19 V10 M9 20 V14 H15 V20" />
+                    </svg>
+                  }
+                }
+              </span>
+            </span>
+            <div>
+              <div class="account-card-name">{{ card.label }}</div>
+              <div class="account-card-hint">{{ card.hint }}</div>
+              <div class="account-card-role">ENTRA COMO {{ card.role === 'generador' ? 'GENERADOR' : 'RECICLADOR' }}</div>
+            </div>
+          </button>
+        }
+      </div>
+      @if (errores['account']) {
+        <div role="alert" class="account-error">{{ errores['account'] }}</div>
+      }
+    </div>
+  }
+
+  <div class="fields-grid">
+    @if (esRegistro()) {
+      <div class="field-full">
+        <label class="field-label">Nombre y apellidos
+          <mat-form-field class="flat-field" appearance="fill" subscriptSizing="dynamic">
+            <input matInput type="text" aria-label="Nombre y apellidos" formControlName="name" (input)="limpiarError('name')" placeholder="Ej. Marco Quispe Rojas" maxlength="80" [errorStateMatcher]="nameMatcher" />
+          </mat-form-field>
+        </label>
+        @if (errores['name']) { <div role="alert" class="field-error">{{ errores['name'] }}</div> }
+      </div>
+    }
+    <div class="field-full">
+      <label class="field-label">Correo electrónico
+        <mat-form-field class="flat-field" appearance="fill" subscriptSizing="dynamic">
+          <input matInput type="email" aria-label="Correo electrónico" formControlName="email" (input)="limpiarError('email')" placeholder="nombre@dominio.com" maxlength="80" [errorStateMatcher]="emailMatcher" autocomplete="username" />
+        </mat-form-field>
+      </label>
+      @if (errores['email']) { <div role="alert" class="field-error">{{ errores['email'] }}</div> }
+    </div>
+    @if (esRegistro()) {
+      <div>
+        <label class="field-label">Teléfono
+          <mat-form-field class="flat-field" appearance="fill" subscriptSizing="dynamic">
+            <input matInput type="tel" aria-label="Teléfono" formControlName="phone" (input)="limpiarError('phone')" placeholder="+51 9xx xxx xxx" maxlength="20" [errorStateMatcher]="phoneMatcher" />
+          </mat-form-field>
+        </label>
+        @if (errores['phone']) { <div role="alert" class="field-error">{{ errores['phone'] }}</div> }
+      </div>
+    }
+    <div [class.field-full]="!esRegistro()">
+      <label class="field-label">Contraseña
+        <mat-form-field class="flat-field" appearance="fill" subscriptSizing="dynamic">
+          <input matInput type="password" aria-label="Contraseña" formControlName="password" (input)="limpiarError('password')" placeholder="Mínimo 8 caracteres" maxlength="80" [errorStateMatcher]="passwordMatcher" autocomplete="current-password" />
+        </mat-form-field>
+      </label>
+      @if (errores['password']) { <div role="alert" class="field-error">{{ errores['password'] }}</div> }
+    </div>
+  </div>
+
+  @if (errorServidor) { <div role="alert" class="field-error">{{ errorServidor }}</div> }
+  @if (aviso) { <div role="status" class="field-notice">{{ aviso }}</div> }
+
+  <button type="submit" mat-flat-button class="flat-button submit-button" [disabled]="cargando">
+    @if (cargando) { <mat-spinner diameter="18" /> } @else { {{ textoBoton() }} }
+  </button>
+
+  <div class="auth-divider">
+    <div class="auth-divider-line"></div>
+    O CONTINÚA CON
+    <div class="auth-divider-line"></div>
+  </div>
+
+  <div class="social-grid">
+    <button type="button" class="flow-button social-button" disabled title="Próximamente: requiere configurar el cliente OAuth">
+      <span class="social-badge social-badge-google">G</span>Google
+    </button>
+    <button type="button" class="flow-button social-button" disabled title="Próximamente: requiere configurar el cliente OAuth">
+      <span class="social-badge social-badge-facebook">f</span>Facebook
+    </button>
+  </div>
+
+  <div class="auth-switch">
+    @if (!esRegistro()) {
+      ¿No tienes cuenta?
+      <button type="button" class="auth-link" (click)="cambiarA('registro')">Regístrate</button>
+    } @else {
+      ¿Ya tienes cuenta?
+      <button type="button" class="auth-link" (click)="cambiarA('login')">Inicia sesión</button>
+    }
+  </div>
+</form>

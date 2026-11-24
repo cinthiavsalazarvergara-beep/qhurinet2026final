@@ -1,0 +1,99 @@
+.dialogo {
+  width: 900px;
+}
+
+.cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.titulo {
+  font-size: 17px;
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+.estado {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  font-size: 13px;
+}
+
+.negrita {
+  font-weight: 600;
+}
+
+.destino {
+  color: #5d6b5f;
+  margin-top: 6px;
+}
+
+.eta {
+  text-align: right;
+}
+
+.eta-num {
+  font: 22px 'IBM Plex Mono', monospace;
+}
+
+.eta-texto {
+  font-size: 11px;
+  color: #5d6b5f;
+}
+
+.mapa {
+  position: relative;
+  height: 360px;
+  flex: none;
+  border: 1px solid #e2e5dc;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #e7ebe1;
+}
+
+.lienzo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.destino-pin {
+  position: absolute;
+  left: 80%;
+  top: 25%;
+  transform: translate(-50%, -50%);
+  background: #ffffff;
+  padding: 8px 12px;
+  border: 1px solid #4c7a2f;
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+.marcador {
+  position: absolute;
+  transition: left 0.5s linear, top 0.5s linear;
+  transform: translate(-50%, -50%);
+  border: 3px solid #ffffff;
+  background: #16281f;
+  color: #a3d24a;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.marcador-icono {
+  display: block;
+  width: 18px;
+  height: 18px;
+}
+
+.nota {
+  font-size: 11px;
+  color: #5d6b5f;
+}

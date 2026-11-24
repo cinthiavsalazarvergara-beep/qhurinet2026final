@@ -1,0 +1,14 @@
+<main class="tarjeta">
+  <h1 class="titulo">Confirmación de correo</h1>
+  @switch (estado) {
+    @case ('loading') { <p role="status">Confirmando tu cuenta…</p> }
+    @case ('ok') {
+      <p role="status">¡Listo! Tu cuenta quedó activa.</p>
+      <a routerLink="/login" class="flow-button flow-primary boton">Iniciar sesión</a>
+    }
+    @default {
+      <p role="alert" class="error">{{ mensaje }}</p>
+      <a routerLink="/login">Volver al acceso</a>
+    }
+  }
+</main>

@@ -1,0 +1,36 @@
+<div class="topbar">
+  <div>
+    <div class="page-title">{{ titulo() }}</div>
+    <div class="page-meta">{{ meta() }}</div>
+  </div>
+  <div class="grow"></div>
+
+  <div class="search">
+    <svg viewBox="0 0 24 24" class="search-icon">
+      <circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"></circle>
+      <path d="M15.5 15.5 L21 21" stroke="currentColor" stroke-width="2"></path>
+    </svg>
+    <input type="text" aria-label="Buscar" placeholder="Buscar" [value]="busqueda" (input)="buscar($event)" class="search-input" />
+  </div>
+
+  <div class="notif-wrap">
+    <button type="button" class="flow-button notif-button" aria-label="Notificaciones" [attr.aria-expanded]="notifAbierto" (click)="notifAbierto = !notifAbierto">
+      <svg viewBox="0 0 24 24" class="notif-icon" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 16 V11 A6 6 0 0 1 18 11 V16 L19.5 18 H4.5 Z"></path>
+        <path d="M10 20 A2 2 0 0 0 14 20"></path>
+      </svg>
+      @if (sinLeer() > 0) {
+        <span class="notif-badge" [attr.aria-label]="sinLeer() + ' sin leer'">{{ sinLeer() }}</span>
+      }
+    </button>
+
+    @if (notifAbierto) {
+      <app-notificaciones-component [notificaciones]="notificaciones" (marcar)="marcar($event)" (marcarTodas)="marcarTodas()" (cerrar)="notifAbierto = false" />
+    }
+  </div>
+
+  <div class="status">
+    <div class="status-dot"></div>
+    {{ estado() }}
+  </div>
+</div>

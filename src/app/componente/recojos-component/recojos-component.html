@@ -1,0 +1,18 @@
+<div class="pantalla">
+  <div>
+    @if (error) { <div role="alert" class="error">{{ error }}</div> }
+    <app-tabla-entregas-component modo="recojos" [filas]="filas" [pestana]="pestana" (accion)="onAccion($event)" />
+  </div>
+
+  <app-resumen-mes-component kgLabel="kg recuperados" countLabel="recojos" />
+</div>
+
+@if (dialogo && entregaAccion) {
+  <app-accion-dialog-component [entrega]="entregaAccion" [tipo]="dialogo" [fechaInicial]="fechaInicial" [franjaInicial]="franjaInicial" (completado)="onCompletado()" (cerrar)="cerrarDialogo()" />
+}
+@if (entregaEscaner) {
+  <app-escaner-dialog-component [entrega]="entregaEscaner" (confirmado)="onConfirmado($event)" (cerrar)="entregaEscaner = null" />
+}
+@if (entregaConfirmada) {
+  <app-valorar-dialog-component [entrega]="entregaConfirmada" [esGenerador]="false" (cerrar)="entregaConfirmada = null" />
+}

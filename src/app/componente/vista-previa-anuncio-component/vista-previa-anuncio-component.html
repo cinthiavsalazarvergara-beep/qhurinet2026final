@@ -1,0 +1,44 @@
+<div class="tarjeta sin-relleno">
+  <div class="mapa">
+    <svg viewBox="0 0 400 190" preserveAspectRatio="xMidYMid slice" class="lienzo">
+      <rect x="0" y="0" width="400" height="190" fill="#e7ebe1"></rect>
+      <rect x="20" y="16" width="130" height="70" rx="5" fill="#dde3d5"></rect>
+      <rect x="190" y="16" width="150" height="70" rx="5" fill="#dde3d5"></rect>
+      <rect x="20" y="120" width="130" height="60" rx="5" fill="#dde3d5"></rect>
+      <rect x="190" y="120" width="150" height="60" rx="5" fill="#d5e0cb"></rect>
+      <path d="M0 103 H400 M170 0 V190" stroke="#ffffff" stroke-width="12"></path>
+    </svg>
+    <div class="ubicacion">
+      <div class="ubicacion-etiqueta">TU UBICACIÓN</div>
+      <div class="ubicacion-palo"></div>
+    </div>
+    <div class="ajustar">Ajustar punto</div>
+  </div>
+  <div class="direccion">
+    <div class="kicker">DIRECCIÓN</div>
+    <div class="direccion-texto">{{ direccion || 'Escribe tu dirección de recojo' }}</div>
+    <div class="direccion-distrito">{{ distrito }}</div>
+  </div>
+</div>
+
+<div class="tarjeta">
+  <div class="kicker">VISTA PREVIA DEL ANUNCIO</div>
+  <div class="anuncio">
+    <div class="anuncio-fila">
+      <div class="icono-material" [style.background]="color" [style.color]="colorIcono">
+        <div class="icono-23"><app-icono-component [nombre]="icono" /></div>
+      </div>
+      <div class="anuncio-cuerpo">
+        <div class="kg-fila">
+          <div class="kg">{{ kg }}</div>
+          <div class="material">{{ material }}</div>
+        </div>
+        <div class="lugar">{{ nombre }} · {{ distrito }}</div>
+        <div class="datos">
+          <div>{{ ventana }}</div>
+          <div>{{ pago }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,10 @@
+<div class="titulo">Mis tickets</div>
+<div class="lista">
+  @for (t of tickets; track t.id) {
+    <div class="ticket" data-ticket>
+      <div class="id">{{ t.id }}</div>
+      <div class="cuerpo"><div class="asunto">{{ t.title }}</div><div class="meta">{{ meta(t) }}</div></div>
+      <div class="estado" [style.background]="colores(t)[0]" [style.color]="colores(t)[1]">{{ t.state }}</div>
+    </div>
+  }
+</div>

@@ -1,0 +1,60 @@
+@switch (nombre) {
+  <!-- Navegación (grosor 1,8) -->
+  @case ('mapa') {
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6.5 L9.5 4 L15 6.5 L21 4 V17.5 L15 20 L9.5 17.5 L3 20 Z M9.5 4 V17.5 M15 6.5 V20" /></svg>
+  }
+  @case ('recojos') {
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6 H20 M4 12 H20 M4 18 H14" /></svg>
+  }
+  @case ('chats') {
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 5 H21 V16 H12 L7 20 V16 H3 Z" /></svg>
+  }
+  @case ('publicaciones') {
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4.5" y="3.5" width="15" height="17" rx="2" /><path d="M8 8.5 H16 M8 12 H16 M8 15.5 H12.5" /></svg>
+  }
+  @case ('publicar') {
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5 V19 M5 12 H19" /></svg>
+  }
+  @case ('soporte') {
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8.5" /><path d="M9.5 9.5 A2.5 2.5 0 1 1 12 13 V14.5" /><circle cx="12" cy="17.5" r="0.9" fill="currentColor" stroke="none" /></svg>
+  }
+  @case ('perfil') {
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8.5" r="4" /><path d="M4.5 20 C5.5 15.5 8.5 14 12 14 C15.5 14 18.5 15.5 19.5 20" /></svg>
+  }
+  <!-- Tipos de punto de reciclaje -->
+  @case ('reciclador') {
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8.5" r="4" /><path d="M4.5 20 C5.5 15.5 8.5 14 12 14 C15.5 14 18.5 15.5 19.5 20" /></svg>
+  }
+  @case ('acopio') {
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10 L12 4 L21 10 V20 H3 Z" /><path d="M8 20 V13 H16 V20" /></svg>
+  }
+  @case ('bodega') {
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10 H20 L18 5 H6 Z M5 10 V20 H19 V10 M9 20 V14 H15 V20" /></svg>
+  }
+  @case ('municipal') {
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9 L12 4 L20 9 Z M6 11 V18 M12 11 V18 M18 11 V18 M4 20 H20" /></svg>
+  }
+  <!-- Materiales (grosor 1,7, redondeado) -->
+  @case ('carton') {
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4.2 L20.3 8.1 V16 L12 19.9 L3.7 16 V8.1 Z" /><path d="M3.7 8.1 L12 12 L20.3 8.1" /><path d="M12 12 V19.9" /><path d="M7.8 6.15 L16.2 10.05" /></svg>
+  }
+  @case ('papel') {
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6.2 3.6 H13.8 L18.4 8.2 V20.4 H6.2 Z" /><path d="M13.8 3.6 V8.2 H18.4" /><path d="M9 12.6 H15.4" /><path d="M9 16 H13.2" /></svg>
+  }
+  @case ('vidrio') {
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3.6 H15 V7.2 L17 10.2 V18.8 A1.6 1.6 0 0 1 15.4 20.4 H8.6 A1.6 1.6 0 0 1 7 18.8 V10.2 L9 7.2 Z" /><path d="M7 12.6 H17" /></svg>
+  }
+  @case ('metal') {
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5.8" rx="4.8" ry="2.2" /><path d="M7.2 5.8 V18.2 A4.8 2.2 0 0 0 16.8 18.2 V5.8" /><path d="M7.2 9.6 H16.8" /></svg>
+  }
+  @case ('electronicos') {
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="7.2" y="7.2" width="9.6" height="9.6" rx="1.6" /><rect x="10.2" y="10.2" width="3.6" height="3.6" rx="0.6" /><path d="M9.8 7.2 V4.2 M14.2 7.2 V4.2 M9.8 16.8 V19.8 M14.2 16.8 V19.8 M7.2 9.8 H4.2 M7.2 14.2 H4.2 M16.8 9.8 H19.8 M16.8 14.2 H19.8" /></svg>
+  }
+  @case ('organico') {
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.6 19.4 C4.6 11.4 10.8 5.2 19.4 4.6 C19.4 13 13 19.4 4.6 19.4 Z" /><path d="M4.6 19.4 C8.4 15.2 12.6 12.2 16.8 10.2" /></svg>
+  }
+  <!-- PET y plástico comparten el mismo trazo (como en el prototipo) -->
+  @default {
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3.6 H14 V5.8 C14 7.1 16 7.9 16 11 V18.8 A1.6 1.6 0 0 1 14.4 20.4 H9.6 A1.6 1.6 0 0 1 8 18.8 V11 C8 7.9 10 7.1 10 5.8 Z" /><path d="M8 12.8 H16" /><path d="M8 15.2 H16" /></svg>
+  }
+}

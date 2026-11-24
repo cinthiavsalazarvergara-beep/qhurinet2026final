@@ -7,18 +7,18 @@
 | Back (Spring Boot, :8088) | `./mvnw spring-boot:run` (o `docker compose up`) | Copiar `.env.example` → `.env`. Con `MAIL_MODE=log` el token de verificación del registro sale en `logs/api.log`. `FRONTEND_URL` ya apunta a `http://localhost:4200` (CORS). |
 | Front (Angular 22, :4200) | `npm ci && npm start` | Usa `src/environments/environment.development.ts` → `apiUrl: http://localhost:8088/api/v1`. |
 | Build de producción | `npm run build` | Reemplaza por `environment.ts` → `apiUrl: /api/v1` (misma URL de origen detrás del proxy). Cambiarlo ahí, nunca en el código. |
-| Tests | `npm test` | 99 pruebas (Vitest). Sin red: el backend se simula con `src/app/testing/fake-api.ts`. |
+| Tests | `npm test` | 127 pruebas (Karma + Jasmine en Chrome/Edge headless). Sin red: el backend se simula con `src/app/testing/fake-api.ts` + `fake-backend.ts`. |
 
 Flujo de prueba manual: registrar un generador y un reciclador → copiar cada token de `logs/api.log` → abrir `http://localhost:4200/verify-email?token=…` → iniciar sesión.
 
 ## 2. Seguridad implementada en el front
 
-- **Login real con JWT** (`POST /auth/login`). El token y el usuario se guardan en `sessionStorage` (se pierden al cerrar la pestaña) y se restauran al recargar solo si el `exp` del JWT sigue vigente.
-- **Interceptor** (`core/auth.interceptor.ts`): agrega `Authorization: Bearer` solo a URLs de la API; ante un `401` cierra sesión y manda a `/login` (excepto en `/auth/*`, donde un 401 son credenciales malas).
-- **Guard de autenticación** (`authGuard`) en `/app` y **guard por rol** (`roleGuard`) en cada pantalla: Mapa y Recojos → reciclador; Publicar y Publicaciones → generador. Entrar a una pantalla ajena redirige a la propia.
+- **Login real con JWT** (`POST /auth/login`). El token se toma del header `Authorization` de la respuesta (o del cuerpo `AuthResponseDTO` si el navegador no expone el header) y se guarda en `localStorage` junto con el rol y el usuario; la sesión solo cuenta si el `exp` del JWT sigue vigente.
+- **Interceptor** (`interceptor/login-interceptor.ts`): agrega `Authorization: Bearer` solo a URLs de la API; ante un `401` cierra sesión y manda a `/login` (excepto en `/auth/*`, donde un 401 son credenciales malas).
+- **Guard de autenticación** (`AuthGuard`, `guards/auth-guard.ts`) en `/app` y **guard por rol** (`RolGuard`, `guards/rol-guard.ts`, lee `data.rol` de la ruta) en cada pantalla: Mapa y Recojos → reciclador; Publicar y Publicaciones → generador. Entrar a una pantalla ajena redirige a la propia.
 - **El rol lo dicta el servidor**, no el usuario: se quitó el selector de tipo de cuenta del login y el botón que cambiaba de rol. El tipo de cuenta solo se elige al registrarse (`rolId` 1 = generador, 2 = recolector, según `data.sql`).
-- **URL de la API en `environment`** (`API_URL` es un `InjectionToken`, sobreescribible en tests).
-- Al cerrar sesión o entrar con otra cuenta, el store se vacía (`ConsoleStore.reset()`), para no mostrar datos del usuario anterior.
+- **URL de la API en `environment`** (`environment.apiUrl`, usada por cada servicio `services/*-service.ts`).
+- Al cerrar sesión o entrar con otra cuenta se borran las claves de la sesión y la consola reinicia la ruta y la búsqueda (`RutaService.reset()`), para no mostrar datos del usuario anterior.
 - La autorización real sigue siendo la del back (`@PreAuthorize`/`SecurityConfig`); los guards del front son solo UX.
 - Validación en cliente alineada con la del back (correo, teléfono de 9 dígitos, contraseña ≥ 8, franja `manana|tarde|noche`, CCI de 20 dígitos, etc.).
 
@@ -52,7 +52,7 @@ Flujo de prueba manual: registrar un generador y un reciclador → copiar cada t
 
 ## 5. Pruebas
 
-- 8 archivos, **99 pruebas** (antes 62): store, auth, guards, interceptor, rutas con navegación real y formulario de acceso.
+- 15 archivos, **127 pruebas** (Karma + Jasmine): login, guards, interceptor, rutas con navegación real, formulario de acceso y cada pantalla (mapa, recojos, publicaciones, publicar, chats, perfil, soporte, cabecera), además del cálculo local de la ruta.
 - Se mantienen las existentes adaptadas al backend real y se añadieron pruebas de: JWT y expiración, interceptor (Bearer / 401), guard por rol, los tres defectos, errores del servidor (409/401), flujo coordinar → iniciar → validar QR → completar, valoración del generador.
 - Cambios de comportamiento que obligaron a reescribir pruebas (no se borró cobertura): el login ya no es simulado; los estados salen del backend (`Reprogramado` no existe: reprogramar deja la solicitud `Coordinada`); las franjas son `manana/tarde/noche`; una publicación = un solo material; el código QR ya no se muestra de muestra.
 - **No se probó contra el back en ejecución** (ver README de entrega): el contrato se verificó leyendo controladores/DTOs.

@@ -1,0 +1,28 @@
+<div role="region" aria-label="Notificaciones" class="panel" (keydown.escape)="cerrar.emit()">
+  <div class="cabecera">
+    <div>
+      <div class="titulo">Notificaciones</div>
+      <div class="subtitulo">{{ sinLeer() }} SIN LEER</div>
+    </div>
+    <div class="crece"></div>
+    <button type="button" class="flow-button pequeno" (click)="marcarTodas.emit()" [disabled]="sinLeer() === 0">Marcar todas</button>
+    <button type="button" class="flow-button cerrar" aria-label="Cerrar notificaciones" (click)="cerrar.emit()">×</button>
+  </div>
+  <div class="lista">
+    @for (n of notificaciones; track n.id) {
+      <div class="item" [class.no-leida]="!n.read">
+        <div class="punto"></div>
+        <div class="cuerpo">
+          <div class="fila">
+            <div class="item-titulo">{{ n.title }}</div>
+            <div class="hora">{{ n.time }}</div>
+          </div>
+          <div class="texto">{{ n.text }}</div>
+          @if (!n.read) {
+            <button type="button" class="flow-button marcar" (click)="marcar.emit(n.id)">Marcar como leída</button>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>

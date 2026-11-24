@@ -1,0 +1,30 @@
+<div class="pantalla">
+  <div class="tarjeta faq">
+    <div class="titulo">Preguntas frecuentes</div>
+    <div class="lista">
+      @for (q of faqs; track $index; let i = $index) {
+        <div class="pregunta">
+          <button type="button" class="pregunta-boton" [attr.aria-expanded]="!!abiertas[i]" (click)="toggleFaq(i)">
+            <span class="pregunta-texto">{{ q.pregunta }}</span>
+            <span class="signo">{{ abiertas[i] ? '−' : '+' }}</span>
+          </button>
+          @if (abiertas[i]) { <div class="respuesta">{{ q.respuesta }}</div> }
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="columna">
+    <div class="llamada">
+      <div class="kicker">SITUACIÓN EXTREMA</div>
+      <div class="llamada-titulo">Habla por teléfono con el equipo administrativo</div>
+      <div class="llamada-texto">Para riesgos de seguridad, incumplimientos graves o suplantación de identidad.</div>
+      <div class="llamar">Llamar ahora</div>
+      <div class="disponible">DISPONIBLE 24/7</div>
+    </div>
+
+    <app-reportar-caso-component />
+
+    <app-mis-tickets-component />
+  </div>
+</div>

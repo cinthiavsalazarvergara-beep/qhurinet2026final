@@ -1,0 +1,113 @@
+.panel {
+  position: absolute;
+  z-index: 5;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 320px;
+  background: #ffffff;
+  border-left: 1px solid #e2e5dc;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  overflow-y: auto;
+}
+
+.cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.kicker {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #6c7a6e;
+}
+
+.cerrar {
+  background: #ffffff;
+  border: 1px solid #d8dcd2;
+  border-radius: 7px;
+  width: 30px;
+  height: 30px;
+  font-size: 20px;
+}
+
+.simbolo {
+  margin-bottom: 12px;
+}
+
+.icono-16 {
+  width: 16px;
+  height: 16px;
+}
+
+.nombre {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.tipo {
+  font-size: 12px;
+  color: #5d6b5f;
+  margin-top: 6px;
+}
+
+.datos {
+  border: 1px solid #e2e5dc;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+.negrita {
+  font-weight: 600;
+}
+
+.gris {
+  color: #5d6b5f;
+}
+
+.fila {
+  display: flex;
+  justify-content: space-between;
+}
+
+.mono {
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.etiquetas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.agregar {
+  color: #16281f;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 11px;
+  border-radius: 8px;
+  background: #a3d24a;
+}
+
+.agregar.en-ruta {
+  background: #eef2e4;
+}
+
+.pista {
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: #5d6b5f;
+}

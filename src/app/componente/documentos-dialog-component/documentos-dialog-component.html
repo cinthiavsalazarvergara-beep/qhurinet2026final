@@ -1,0 +1,36 @@
+<div class="flow-overlay">
+  <div class="flow-dialog dialogo" cdkTrapFocus [cdkTrapFocusAutoCapture]="true" role="dialog" aria-modal="true" aria-label="Documentos de verificación" (keydown.escape)="cerrar.emit()">
+    <div class="cabecera">
+      <div><div class="flow-heading">VERIFICACIÓN</div><div class="titulo">Mis documentos</div></div>
+      <button type="button" class="flow-button" aria-label="Cerrar diálogo" (click)="cerrar.emit()">×</button>
+    </div>
+    <div class="lista">
+      <div class="fila encabezado"><div>TIPO</div><div>DOCUMENTO</div><div>ESTADO</div><div>FECHA</div></div>
+      @for (d of documentos; track d.id) {
+        <div class="fila documento" [class.aprobado]="d.state === 'Aprobado'">
+          <div class="mono">{{ d.type }}</div>
+          <div class="nombre">{{ d.name }}</div>
+          <div class="estado"><div class="punto"></div><div class="estado-texto">{{ d.state.toUpperCase() }}</div></div>
+          <div class="mono gris">{{ d.date }}</div>
+        </div>
+      }
+    </div>
+    <div class="subir">
+      <div class="subir-titulo">Subir un documento</div>
+      <div>
+        <div class="flow-heading">TIPO</div>
+        <div role="radiogroup" aria-label="Tipo de documento" class="tipos">
+          @for (t of tipos; track t) {
+            <button type="button" role="radio" class="tipo" [class.activo]="tipo === t" [attr.aria-checked]="tipo === t" (click)="tipo = t">{{ t }}</button>
+          }
+        </div>
+      </div>
+      <div class="archivo">
+        <label class="flow-button en-linea">Seleccionar archivo<input type="file" accept="image/*,.pdf" aria-label="Seleccionar archivo" (change)="onArchivo($event)" class="oculto" /></label>
+        @if (nombreArchivo) { <div class="nombre-archivo">{{ nombreArchivo }}</div> } @else { <div class="pista">PDF o imagen · se valida automáticamente</div> }
+      </div>
+      @if (error) { <div role="alert" class="error">{{ error }}</div> }
+      <div><button type="button" class="flow-button flow-primary" (click)="subir()">Subir documento</button></div>
+    </div>
+  </div>
+</div>

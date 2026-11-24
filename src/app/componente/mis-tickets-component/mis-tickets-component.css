@@ -1,0 +1,60 @@
+:host {
+  display: block;
+  background: #ffffff;
+  border: 1px solid #e2e5dc;
+  border-radius: 14px;
+  padding: 22px 24px;
+}
+
+.titulo {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.lista {
+  display: flex;
+  flex-direction: column;
+  margin-top: 8px;
+}
+
+.ticket {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+  border-top: 1px solid #eceee7;
+}
+
+.id {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #6c7a6e;
+  flex: none;
+}
+
+.cuerpo {
+  flex: 1;
+  min-width: 0;
+}
+
+.asunto {
+  font-size: 12.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: #8b9186;
+  margin-top: 3px;
+}
+
+.estado {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 9px;
+  border-radius: 6px;
+  flex: none;
+}

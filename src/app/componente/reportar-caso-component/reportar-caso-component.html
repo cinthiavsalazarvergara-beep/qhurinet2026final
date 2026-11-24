@@ -1,0 +1,20 @@
+<form [formGroup]="form" (ngSubmit)="enviar()">
+  <div class="titulo">Reportar un caso</div>
+  <div role="radiogroup" aria-label="Categoría del caso" class="categorias">
+    @for (c of categorias; track c) {
+      <button type="button" role="radio" class="categoria" [class.activa]="categoria === c" [attr.aria-checked]="categoria === c" (click)="categoria = c">{{ c }}</button>
+    }
+  </div>
+  <textarea aria-label="Cuéntanos qué pasó" placeholder="Cuéntanos qué pasó" formControlName="texto" (input)="error = ''" maxlength="500" class="texto"></textarea>
+  <div class="evidencia">
+    <label class="flow-button adjuntar">Adjuntar evidencia<input type="file" accept="image/*" aria-label="Adjuntar evidencia" (change)="onArchivo($event)" class="oculto" /></label>
+    @if (nombreArchivo) {
+      <div class="archivo"><span class="archivo-nombre">{{ nombreArchivo }}</span><button type="button" aria-label="Quitar evidencia" class="quitar" (click)="quitarArchivo()">×</button></div>
+    } @else {
+      <div class="pista">Imagen opcional</div>
+    }
+  </div>
+  @if (error) { <div role="alert" class="error">{{ error }}</div> }
+  @if (aviso) { <div role="status" class="aviso">{{ aviso }}</div> }
+  <button type="submit" class="enviar">Enviar reporte</button>
+</form>

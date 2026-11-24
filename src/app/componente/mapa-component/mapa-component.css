@@ -1,0 +1,214 @@
+:host {
+  display: block;
+}
+
+.pantalla {
+  flex: none;
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  height: calc(100vh - 76px);
+  min-height: 640px;
+}
+
+.mapa {
+  position: relative;
+  min-height: 640px;
+  min-width: 720px;
+  background: #e7ebe1;
+}
+
+.lienzo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.herramientas {
+  position: absolute;
+  left: 18px;
+  right: 348px;
+  top: 18px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.pequeno {
+  font-size: 11px;
+  padding: 8px;
+}
+
+.pines {
+  position: absolute;
+  top: 64px;
+  right: 348px;
+  bottom: 175px;
+  left: 0;
+}
+
+.trazo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.tu {
+  position: absolute;
+  left: 12%;
+  top: 92%;
+  transform: translate(-50%, -50%);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: #16281f;
+}
+
+.pin-anuncio {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 7px 9px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid #e2e5dc;
+}
+
+.pin-anuncio.destacado {
+  border-color: #16281f;
+  box-shadow: 0 2px 0 #16281f;
+}
+
+.pin-anuncio.reclamado {
+  border-color: #4c7a2f;
+}
+
+.pin-icono {
+  display: block;
+  width: 18px;
+  height: 18px;
+}
+
+.pin-kg {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.pin-punto {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  padding: 4px;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e2e5dc;
+}
+
+.pin-punto.seleccionado {
+  border-color: #16281f;
+}
+
+.pin-punto.en-ruta {
+  border-color: #4c7a2f;
+}
+
+.icono-16 {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+
+.nuevos {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  background: #ffffff;
+  border: 1px solid #e2e5dc;
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  gap: 22px;
+  align-items: center;
+}
+
+.kicker {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: #6c7a6e;
+  letter-spacing: 0.06em;
+}
+
+.nuevos-titulo {
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 5px;
+}
+
+.nuevos-detalle {
+  font-size: 11px;
+  color: #5d6b5f;
+  margin-top: 4px;
+}
+
+.derecha {
+  text-align: right;
+}
+
+.nuevos-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.leyenda {
+  position: absolute;
+  left: 18px;
+  bottom: 18px;
+  background: #ffffff;
+  border: 1px solid #e2e5dc;
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.leyenda-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: #3d4a3f;
+  border: none;
+  padding: 0;
+  background: transparent;
+}
+
+.leyenda-item.oculto {
+  opacity: 0.4;
+  text-decoration: line-through;
+}
+
+.leyenda-simbolo {
+  width: 12px;
+  height: 12px;
+}
+
+.leyenda-anuncio {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: #5d6b5f;
+}
+
+.leyenda-caja {
+  width: 12px;
+  height: 10px;
+  border: 1px solid #16281f;
+  border-radius: 3px;
+}

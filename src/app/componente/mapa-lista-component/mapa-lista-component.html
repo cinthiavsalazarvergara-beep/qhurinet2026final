@@ -1,0 +1,72 @@
+<div class="columna">
+  <div role="group" aria-label="Vista de la lista" class="vistas">
+    @for (v of vistas; track v.key) {
+      <button type="button" class="map-button map-chip" [class.activo]="v.active" [attr.aria-pressed]="v.active" (click)="chip.emit(v)">{{ v.label }}</button>
+    }
+  </div>
+  <div class="filtros">
+    <div class="mono-label ancho">FILTROS</div>
+    @for (f of filtros; track f.label) {
+      <button type="button" class="map-button map-chip" [class.activo]="f.active" [attr.aria-pressed]="f.active" (click)="chip.emit(f)">{{ f.label }}</button>
+    }
+    @if (esPuntos) {
+      <div class="mono-label ancho tipo">TIPO DE PUNTO</div>
+      @for (f of tiposPunto; track f.key) {
+        <button type="button" class="map-button map-chip" [class.activo]="f.active" [attr.aria-pressed]="f.active" (click)="chip.emit(f)">{{ f.label }}</button>
+      }
+    }
+  </div>
+
+  <div id="map-list" class="lista">
+    <div role="status" class="mono-label">{{ resultado }}</div>
+    @if (error) { <div role="alert" class="error">{{ error }}</div> }
+    @if (vacio) {
+      <div class="vacio">
+        <div class="negrita">{{ mensajeVacio }}</div>
+        <div class="gris">Prueba otro nombre o dirección, o ajusta los filtros.</div>
+        <button type="button" class="map-button map-chip limpiar" (click)="limpiar.emit()">Limpiar filtros</button>
+      </div>
+    }
+    @if (!esPuntos) {
+      @for (a of anuncios; track a.id) {
+        <div class="tarjeta" [attr.data-ad-card]="a.id" [class.reclamado]="a.claimed" [class.destacado]="a.featured && !a.claimed">
+          <div class="tarjeta-fila">
+            <div class="icono-material" [style.background]="a.color" [style.color]="a.iconFg">
+              <div class="icono-24"><app-icono-component [nombre]="a.mat" /></div>
+            </div>
+            <div class="tarjeta-cuerpo">
+              <div class="kg-fila">
+                <div class="kg">{{ a.kg }}</div>
+                <div class="material">{{ a.material }}</div>
+              </div>
+              <div class="lugar">{{ a.place }}</div>
+              <div class="datos">
+                <div>{{ a.dist }}</div>
+                <div>{{ a.eta }}</div>
+                <div>{{ a.window }}</div>
+              </div>
+            </div>
+          </div>
+          <div class="tarjeta-botones">
+            <button type="button" class="boton-reclamar" (click)="reclamar.emit(a.id)">{{ a.btnLabel }}</button>
+            <button type="button" class="boton-chat" title="Abrir chat" aria-label="Abrir chat" (click)="chat.emit()">
+              <svg viewBox="0 0 24 24"><path d="M3 5 H21 V16 H12 L7 20 V16 H3 Z" fill="none" stroke="currentColor" stroke-width="2"></path></svg>
+            </button>
+          </div>
+        </div>
+      }
+    } @else {
+      @for (p of puntos; track p.id) {
+        <button type="button" class="map-button tarjeta-punto" [class.seleccionado]="p.selected" [class.en-ruta]="p.inRoute && !p.selected" [attr.data-point-card]="p.id" (click)="punto.emit(p.id)">
+          <span class="punto-fila">
+            <span [class]="'point-symbol point-' + p.type"><span class="icono-16"><app-icono-component [nombre]="p.type" /></span></span>
+            <span><span class="punto-nombre">{{ p.name }}</span><span class="punto-tipo">{{ p.typeLabel }}</span></span>
+          </span>
+          <span class="punto-distrito">{{ p.district }}</span>
+          <span class="datos"><span>{{ p.distanceLabel }}</span><span>★ {{ p.ratingLabel }} / 5</span></span>
+          <span class="etiquetas">@for (m of p.tags; track m) {<span class="material-tag">{{ m }}</span>}</span>
+        </button>
+      }
+    }
+  </div>
+</div>

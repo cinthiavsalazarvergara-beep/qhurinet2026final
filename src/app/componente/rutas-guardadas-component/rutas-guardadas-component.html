@@ -1,0 +1,15 @@
+<aside class="flow-side" aria-label="Rutas guardadas">
+  <div class="cabecera"><span class="flow-heading">RUTAS GUARDADAS</span><button class="flow-button" type="button" aria-label="Cerrar rutas guardadas" (click)="cerrar.emit()">×</button></div>
+  @if (!rutas.length) { <div class="vacio">No tienes rutas guardadas. Prepara una ruta y pulsa Guardar ruta.</div> }
+  @for (r of rutas; track r.id) {
+    <div class="ruta" [attr.data-saved-route]="r.id">
+      <div class="nombre">{{ r.name }}</div>
+      <div class="descripcion">{{ r.description }}</div>
+      <div class="meta">{{ r.count }} paradas · {{ r.distance }} · {{ r.minutes }} min</div>
+      <div class="botones">
+        <button class="flow-button flow-primary" type="button" (click)="cargar.emit(r)">Cargar ruta</button>
+        <button class="flow-button flow-danger" type="button" (click)="eliminar.emit(r)">Eliminar</button>
+      </div>
+    </div>
+  }
+</aside>

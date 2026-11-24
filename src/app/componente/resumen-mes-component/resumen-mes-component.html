@@ -1,0 +1,28 @@
+<div class="columna">
+  <div class="tarjeta">
+    <div class="lbl">RESUMEN DEL MES</div>
+    @if (resumen) {
+      <div class="cifras">
+        <div><div class="num">{{ resumen.kg }}</div><div class="cap">{{ kgLabel }}</div></div>
+        <div><div class="num">{{ resumen.total }}</div><div class="cap">{{ countLabel }}</div></div>
+        <div><div class="num">{{ resumen.rating }}</div><div class="cap">valoración</div></div>
+        <div><div class="num">{{ resumen.compliance }}</div><div class="cap">cumplimiento</div></div>
+      </div>
+    } @else {
+      <div role="status" class="cap cargando">Cargando resumen…</div>
+    }
+  </div>
+  <div class="tarjeta">
+    <div class="lbl">MATERIALES DEL MES</div>
+    <div class="barras">
+      @for (m of materiales; track m.label) {
+        <div>
+          <div class="barra-cabecera"><div>{{ m.label }}</div><div class="mono">{{ m.kg }}</div></div>
+          <div class="barra-fondo"><div class="barra-relleno" [style.background]="m.color" [style.width.%]="m.pct"></div></div>
+        </div>
+      } @empty {
+        <div class="cap">Aún no hay recolecciones este mes.</div>
+      }
+    </div>
+  </div>
+</div>

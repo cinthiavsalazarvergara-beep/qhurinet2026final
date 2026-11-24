@@ -1,0 +1,71 @@
+.columna {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.tarjeta {
+  background: #ffffff;
+  border: 1px solid #e2e5dc;
+  border-radius: 14px;
+  padding: 20px;
+}
+
+.lbl {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #6c7a6e;
+}
+
+.cifras {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.cap {
+  font-size: 11px;
+  color: #5d6b5f;
+  margin-top: 3px;
+}
+
+.cargando {
+  margin-top: 16px;
+}
+
+.barras {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.barra-cabecera {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+}
+
+.mono {
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.barra-fondo {
+  height: 6px;
+  background: #eceee7;
+  border-radius: 3px;
+  margin-top: 6px;
+  overflow: hidden;
+}
+
+.barra-relleno {
+  height: 100%;
+}

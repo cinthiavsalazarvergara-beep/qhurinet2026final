@@ -1,0 +1,143 @@
+<div class="pantalla">
+  <form class="tarjeta formulario" [formGroup]="form" (ngSubmit)="publishAd()">
+    <div class="titulo">Anunciar material</div>
+    <div class="subtitulo">Los recicladores cerca de ti verán el anuncio en el mapa al publicarlo.</div>
+
+    <div class="campos">
+      <div>
+        <div class="mono-label">TIPO DE MATERIAL</div>
+        <div role="group" aria-label="Tipo de material" class="chips">
+          @for (m of matChips(); track m.key) {
+            <button type="button" class="chip-material" [class.activo]="m.active" (click)="toggleMat(m.key)" [attr.aria-pressed]="m.active">{{ m.label }}</button>
+          }
+        </div>
+        @if (errores['mats']) { <div role="alert" class="error">{{ errores['mats'] }}</div> }
+      </div>
+
+      <div>
+        <div class="mono-label">CANTIDAD APROXIMADA</div>
+        <div class="fila">
+          <label class="field-label"><span class="sr-only">Cantidad</span>
+            <mat-form-field class="flat-field qty-field" appearance="fill" subscriptSizing="dynamic">
+              <input matInput type="text" inputmode="decimal" placeholder="24" aria-label="Cantidad aproximada en kilos" formControlName="qty" (input)="soloNumero('qty', $event)" [errorStateMatcher]="qtyMatcher" />
+              <span matTextSuffix>kg</span>
+            </mat-form-field>
+          </label>
+          <div class="rapidas">
+            @for (n of cantidadesRapidas; track n) {
+              <button type="button" class="flow-button rapida" (click)="setQty(n)">{{ n }}</button>
+            }
+          </div>
+        </div>
+        @if (errores['qty']) { <div role="alert" class="error">{{ errores['qty'] }}</div> }
+      </div>
+
+      <div>
+        <div class="mono-label">DISPONIBILIDAD</div>
+        <div class="fila-campos">
+          <label class="field-label crece"><span class="sr-only">Fecha de recojo</span>
+            <mat-form-field class="flat-field" appearance="fill" subscriptSizing="dynamic">
+              <input matInput [matDatepicker]="picker" [min]="minDate" formControlName="date" (dateChange)="limpiarError('date')" placeholder="Elige una fecha" aria-label="Fecha de recojo" readonly (click)="picker.open()" [errorStateMatcher]="dateMatcher" />
+              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </label>
+          <label class="field-label crece"><span class="sr-only">Franja horaria</span>
+            <mat-form-field class="flat-field" appearance="fill" subscriptSizing="dynamic">
+              <mat-select aria-label="Franja horaria" formControlName="slot">
+                @for (o of slotOptions; track o.value) { <mat-option [value]="o.value">{{ o.label }}</mat-option> }
+              </mat-select>
+            </mat-form-field>
+          </label>
+        </div>
+        @if (errores['date']) { <div role="alert" class="error">{{ errores['date'] }}</div> }
+        <div class="fila-campos separado">
+          <label class="field-label crece-2"><span class="sr-only">Dirección de recojo</span>
+            <mat-form-field class="flat-field" appearance="fill" subscriptSizing="dynamic">
+              <input matInput type="text" placeholder="Av. Pershing 345" aria-label="Dirección de recojo" maxlength="255" formControlName="address" (input)="limpiarError('address')" [errorStateMatcher]="addressMatcher" />
+            </mat-form-field>
+          </label>
+          <label class="field-label crece"><span class="sr-only">Distrito</span>
+            <mat-form-field class="flat-field" appearance="fill" subscriptSizing="dynamic">
+              <mat-select aria-label="Distrito" formControlName="district">
+                @for (d of districtOptions; track d) { <mat-option [value]="d">{{ d }}</mat-option> }
+              </mat-select>
+            </mat-form-field>
+          </label>
+        </div>
+        @if (errores['address']) { <div role="alert" class="error">{{ errores['address'] }}</div> }
+      </div>
+
+      <div>
+        <div class="mono-label">PAGO (OPCIONAL)</div>
+        <div role="radiogroup" aria-label="Pago" class="chips">
+          @for (o of payOptions; track o) {
+            <button type="button" role="radio" class="chip-pago" [class.activo]="pay === o" [attr.aria-checked]="pay === o" (click)="selectPay(o)">{{ o }}</button>
+          }
+        </div>
+        @if (pay !== 'Sin pago') {
+          <label class="field-label monto"><span class="sr-only">Monto</span>
+            <mat-form-field class="flat-field" appearance="fill" subscriptSizing="dynamic">
+              <span matTextPrefix>S/&nbsp;</span>
+              <input matInput type="text" inputmode="decimal" placeholder="0.00" aria-label="Monto del pago" formControlName="amount" (input)="soloNumero('amount', $event)" [errorStateMatcher]="amountMatcher" />
+            </mat-form-field>
+          </label>
+          @if (errores['amount']) { <div role="alert" class="error">{{ errores['amount'] }}</div> }
+        }
+      </div>
+
+      <div class="ancho-completo">
+        <div class="mono-label">NOTA PARA EL RECICLADOR (OPCIONAL)</div>
+        <textarea aria-label="Nota para el reciclador" placeholder="Ej. las cajas están en la puerta lateral, toca el timbre 2." formControlName="note" (input)="limpiarError('note')" [attr.aria-invalid]="noteOver()" class="nota" [class.excedida]="noteOver() || errores['note']" maxlength="2000"></textarea>
+        <div class="contador" [class.excedida]="noteOver()">{{ nota().length }}/{{ noteLimit }}</div>
+        @if (errores['note']) { <div role="alert" class="error">{{ errores['note'] }}</div> }
+        @if (sugerencia(); as s) {
+          <div role="status" class="sugerencia">
+            <div class="sugerencia-sello">AI</div>
+            <div class="sugerencia-texto">
+              <div class="sugerencia-titulo">Sugerencia del sistema: Por {{ s.source }}, parece {{ s.label }}.</div>
+              <div class="sugerencia-confianza">CONFIANZA {{ s.confidence }}% · POR PALABRA CLAVES CLAVE</div>
+            </div>
+            <button type="button" class="flow-button flow-primary pequeno" (click)="applySuggestion(s)">Aceptar</button>
+            <button type="button" class="flow-button pequeno" (click)="dismissSuggestion(s)">Rechazar</button>
+          </div>
+        }
+      </div>
+
+      <div class="ancho-completo">
+        <div class="mono-label">FOTO (OPCIONAL)</div>
+        <div class="fotos">
+          <label title="Agregar foto del material" class="agregar-foto">
+            <svg viewBox="0 0 24 24" class="icono-foto" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.2" y="5.2" width="17.6" height="13.6" rx="2.2"></rect><circle cx="8.6" cy="10.2" r="1.7"></circle><path d="M3.6 16.6 L9 11.4 L13 15 L16 12.6 L20.4 16.6"></path></svg>
+            <div class="agregar-texto">Agregar</div>
+            <input type="file" accept="image/*" aria-label="Agregar foto del material" (change)="onPhoto($event)" class="oculto" />
+          </label>
+          @if (photo) {
+            <div class="foto">
+              <img [src]="photo" alt="Foto del material" class="foto-img" />
+              <button type="button" class="flow-button quitar-foto" aria-label="Quitar foto" (click)="removePhoto()">×</button>
+            </div>
+            <div class="foto-nombre">{{ photoName }}</div>
+          } @else {
+            <div class="foto-vacia">
+              <svg viewBox="0 0 24 24" class="icono-foto-vacia" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.2" y="5.2" width="17.6" height="13.6" rx="2.2"></rect><circle cx="8.6" cy="10.2" r="1.7"></circle><path d="M3.6 16.6 L9 11.4 L13 15 L16 12.6 L20.4 16.6"></path></svg>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="pie">
+      <button type="submit" mat-flat-button class="flat-button publish-button" [disabled]="publishing">Publicar anuncio</button>
+      <button type="button" class="flow-button borrador" (click)="saveDraft()">Guardar borrador</button>
+      @if (draftNotice) { <div role="status" class="aviso">{{ draftNotice }}</div> }
+      <div class="crece"></div>
+      @if (errores['form']) { <div role="alert" class="error-pie">{{ errores['form'] }}</div> } @else { <div class="pista">{{ publishHint() }}</div> }
+    </div>
+  </form>
+
+  <app-vista-previa-anuncio-component
+    [direccion]="form.value.address" [distrito]="form.value.district" [nombre]="nombre"
+    [kg]="previewKg()" [material]="previewMatLabel()" [icono]="previewIcon()" [color]="previewColor()" [colorIcono]="previewIconFg()"
+    [ventana]="previewWindow()" [pago]="pay.toUpperCase()" />
+</div>

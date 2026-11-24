@@ -1,0 +1,36 @@
+<div class="flow-overlay">
+  <form class="flow-dialog dialogo" [formGroup]="form" cdkTrapFocus [cdkTrapFocusAutoCapture]="true" role="dialog" aria-modal="true" aria-label="Editar perfil" (keydown.escape)="cerrar.emit()" (ngSubmit)="guardar()">
+    <div class="cabecera"><span class="titulo">Editar perfil</span><button type="button" class="flow-button" aria-label="Cerrar diálogo" (click)="cerrar.emit()">×</button></div>
+    <div class="foto-fila">
+      @if (foto) {
+        <img [src]="foto" alt="Vista previa de la foto" class="avatar" />
+      } @else {
+        <div class="avatar avatar-inicial">{{ inicial() }}</div>
+      }
+      <div class="foto-botones">
+        <label class="flow-button en-linea">Cambiar foto<input type="file" accept="image/*" aria-label="Cambiar foto" (change)="onFoto($event)" class="oculto" /></label>
+        @if (foto) { <button type="button" class="flow-button flow-danger" (click)="quitarFoto()">Quitar foto</button> }
+      </div>
+    </div>
+    <div>
+      <label class="etiqueta">Nombre<input class="flow-field" aria-label="Nombre" formControlName="name" (input)="limpiarError('name')" maxlength="60" /></label>
+      @if (errores['name']) { <div role="alert" class="error">{{ errores['name'] }}</div> }
+    </div>
+    <div>
+      <label class="etiqueta">Teléfono<input class="flow-field" type="tel" aria-label="Teléfono" formControlName="phone" (input)="limpiarError('phone')" maxlength="20" /></label>
+      @if (errores['phone']) { <div role="alert" class="error">{{ errores['phone'] }}</div> }
+    </div>
+    <label class="etiqueta">Descripción<textarea class="flow-field" aria-label="Descripción" formControlName="bio" maxlength="240" rows="3" placeholder="Cuenta qué recoges, en qué zona y en qué horarios."></textarea></label>
+    <div>
+      <div class="etiqueta">Materiales que manejas</div>
+      <div class="chips">
+        @for (m of matChips(); track m.key) {
+          <button type="button" class="chip" [class.activo]="m.active" [attr.aria-pressed]="m.active" (click)="toggleMat(m.key)">{{ m.label }}</button>
+        }
+      </div>
+      @if (errores['mats']) { <div role="alert" class="error">{{ errores['mats'] }}</div> }
+    </div>
+    @if (errores['form']) { <div role="alert" class="error">{{ errores['form'] }}</div> }
+    <div class="botones"><button type="submit" class="flow-button flow-primary">Guardar cambios</button><button type="button" class="flow-button" (click)="cerrar.emit()">Cancelar</button></div>
+  </form>
+</div>

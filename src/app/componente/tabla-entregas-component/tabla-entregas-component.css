@@ -1,0 +1,171 @@
+:host {
+  display: block;
+}
+
+.tabla {
+  background: #ffffff;
+  border: 1px solid #e2e5dc;
+  border-radius: 14px;
+  overflow-x: auto;
+}
+
+.pestanas {
+  display: flex;
+  gap: 6px;
+  padding: 16px 20px;
+  border-bottom: 1px solid #eceee7;
+  min-width: 720px;
+}
+
+.pestana {
+  font: inherit;
+  font-size: 12px;
+  padding: 6px 13px;
+  border-radius: 20px;
+  cursor: pointer;
+  background: #ffffff;
+  color: #3d4a3f;
+  font-weight: 400;
+  border: 1px solid #d8dcd2;
+}
+
+.pestana.activa {
+  background: #16281f;
+  color: #ffffff;
+  font-weight: 600;
+  border-color: #16281f;
+}
+
+.fila-grid {
+  display: grid;
+  grid-template-columns: 92px minmax(200px, 1.4fr) minmax(140px, 1fr) 130px 130px 92px;
+  min-width: 720px;
+  gap: 12px;
+  border-bottom: 1px solid #eceee7;
+}
+
+.encabezado {
+  padding: 13px 20px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #6c7a6e;
+}
+
+.fila {
+  padding: 16px 20px;
+  align-items: center;
+}
+
+.vacio {
+  padding: 28px 20px;
+  font-size: 13px;
+  color: #5d6b5f;
+}
+
+.kg {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.material {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.prioritaria {
+  display: inline-block;
+  background: #fdf3dd;
+  color: #8a6a1f;
+  border-color: #e8b53a;
+  margin-top: 6px;
+}
+
+.lugar {
+  font-size: 11.5px;
+  color: #5d6b5f;
+  margin-top: 2px;
+}
+
+.persona {
+  font-size: 12.5px;
+}
+
+.ventana {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #3d4a3f;
+}
+
+.estado {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+.icono-boton {
+  font: inherit;
+  background: #ffffff;
+  border: 1px solid #d8dcd2;
+  padding: 7px;
+  border-radius: 7px;
+  cursor: pointer;
+  display: flex;
+}
+
+.icono-boton svg {
+  width: 15px;
+  height: 15px;
+  color: #16281f;
+}
+
+.boton-valorar {
+  font: inherit;
+  font-size: 12px;
+  background: #a3d24a;
+  border: none;
+  padding: 7px 10px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.boton-menu {
+  padding: 5px 9px;
+}
+
+.fila-extra {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.fila-completa {
+  grid-column: 1 / -1;
+}
+
+.menu {
+  border-top: 1px solid #e2e5dc;
+  padding-top: 12px;
+}
+
+.motivo {
+  color: #b1573f;
+  font-size: 12px;
+}
+
+.nota {
+  font-size: 11px;
+  color: #5d6b5f;
+}

@@ -1,0 +1,66 @@
+:host {
+  display: block;
+  background: #ffffff;
+  border: 1px solid #e2e5dc;
+  border-radius: 14px;
+  padding: 22px 24px;
+}
+
+.titulo {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.texto {
+  font-size: 12px;
+  color: #5d6b5f;
+  margin-top: 6px;
+  line-height: 1.55;
+}
+
+.lista {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.documento {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #eceee7;
+  border-radius: 8px;
+  padding: 11px 13px;
+}
+
+.punto {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e8b53a;
+}
+
+.nombre {
+  flex: 1;
+  font-size: 12.5px;
+}
+
+.estado {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: #8a6a1f;
+}
+
+.aprobado .punto {
+  background: #4c7a2f;
+}
+
+.aprobado .estado {
+  color: #4c7a2f;
+}
+
+.ver {
+  margin-top: 14px;
+  font-size: 12px;
+}

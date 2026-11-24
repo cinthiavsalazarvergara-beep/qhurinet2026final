@@ -1,7 +1,16 @@
-import { Ad, RouteLocation } from '../model/ad.model';
-import { Delivery, SLOT_LABELS } from '../model/delivery.model';
-import { RecyclingPoint, PointTypeKey, POINT_TYPES } from '../model/point.model';
-import { MiPublicacionDTO, MiSolicitudDTO, PublicacionDTO, PuntoReciclajeDTO } from './api.models';
+import { AdView, RouteLocation } from '../model/ad';
+import { Delivery } from '../model/delivery';
+import { RecyclingPoint, PointTypeKey, POINT_TYPES } from '../model/point';
+import { MiPublicacionDTO, PublicacionDTO } from '../model/publicacion';
+import { MiSolicitudDTO } from '../model/solicitud';
+import { PuntoReciclajeDTO } from '../model/punto-reciclaje';
+import { NotificacionDTO, Notificacion } from '../model/notificacion';
+import { TicketSoporteDTO } from '../model/ticket-soporte';
+import { DocumentoVerificacionDTO } from '../model/documento';
+import { PerfilUsuarioDTO, MetodoPagoUsuarioDTO } from '../model/perfil-usuario';
+import { PayMethodView, PAY_KINDS, Profile, VerificationDoc } from '../model/profile';
+import { Ticket, TICKET_CATEGORIES } from '../model/support';
+import { fmtPhone, shortDate, timeOf } from './utilidades';
 
 const norm = (t: string): string => String(t ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
 
@@ -91,8 +100,6 @@ export const haversineKm = (a: { lat: number; lng: number }, b: { lat: number; l
 };
 const km1 = (n: number) => n.toFixed(1).replace('.', ',');
 
-export interface AdView extends Ad { readonly x: number; readonly y: number; readonly publicationId: number; readonly kgNum: number; }
-
 export function toAd(d: PublicacionDTO, origin = CITY_CENTER): AdView {
   const dist = haversineKm(origin, { lat: Number(d.latitud ?? origin.lat), lng: Number(d.longitud ?? origin.lng) });
   const { x, y } = project(d.latitud, d.longitud);
@@ -119,3 +126,44 @@ export function toPoint(d: PuntoReciclajeDTO, origin = CITY_CENTER): RecyclingPo
 export const toLocation = (a: AdView, pickup: string | null): RouteLocation => ({
   id: a.id, name: a.place.split(' · ')[0], detail: a.material, x: a.x, y: a.y, kg: a.kgNum, pickup,
 });
+
+// ---------------------------------------------------------------- notificaciones, soporte y perfil
+export function toNotificacion(n: NotificacionDTO): Notificacion {
+  const cut = n.mensaje.search(/[.:]/);
+  return {
+    id: 'n' + n.id, apiId: n.id, title: cut > 0 && cut < 48 ? n.mensaje.slice(0, cut) : 'Notificación', text: n.mensaje,
+    time: (shortDate(n.fechaCreacion) + ' · ' + timeOf(n.fechaCreacion)).toUpperCase(), read: n.leida,
+  };
+}
+
+export function toTicket(t: TicketSoporteDTO): Ticket {
+  return {
+    id: '#' + t.id, title: t.asunto, category: TICKET_CATEGORIES[t.categoria] ?? t.categoria,
+    state: t.estado === 'cerrado' ? 'Cerrado' : 'Abierto', evidence: !!t.evidenciaUrl, evidenceName: t.evidenciaUrl ? 'adjunta' : '',
+  };
+}
+
+const DOC_LABELS: Record<string, string> = { dni: 'Documento de identidad', ruc: 'RUC del negocio', otro: 'Otro documento' };
+
+export function toDocumento(d: DocumentoVerificacionDTO): VerificationDoc {
+  return {
+    id: 'd' + d.id, type: d.tipo.toUpperCase(), name: DOC_LABELS[d.tipo.toLowerCase()] ?? 'Documento',
+    state: d.estado ? cap(d.estado) : 'Pendiente', date: shortDate(d.fechaSubida),
+  };
+}
+
+export function toProfile(p: PerfilUsuarioDTO): Profile {
+  return {
+    name: p.nombreCompleto, email: p.email, phone: fmtPhone(p.telefono), bio: p.descripcion ?? '',
+    mats: (p.materiales ?? []).map((m) => matKey(m.nombre)), photo: p.fotoPerfilUrl ?? '',
+  };
+}
+
+export function toPayMethod(m: MetodoPagoUsuarioDTO): PayMethodView {
+  const kind = PAY_KINDS[m.tipo] ?? PAY_KINDS['efectivo'];
+  const dato = m.dato ?? '';
+  const detail = m.tipo === 'tarjeta' ? '•••• ' + dato
+    : ['yape', 'plin'].includes(m.tipo) ? dato.replace(/^(\d{3})\d{3}(\d{3})$/, '$1 ••• $2')
+    : m.tipo === 'transferencia' ? '•••• ' + dato.slice(-4) : 'Pago en mano al entregar';
+  return { id: 'm' + m.id, label: kind.short, bg: kind.bg, fg: kind.fg, detail, isDefault: !!m.predeterminado, canUse: !m.predeterminado };
+}

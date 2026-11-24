@@ -1,0 +1,154 @@
+.dialogo {
+  width: 560px;
+}
+
+.cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.titulo {
+  font-size: 17px;
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+.lista {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.fila {
+  display: grid;
+  grid-template-columns: 70px 1fr 110px 90px;
+  gap: 10px;
+}
+
+.encabezado {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #6c7a6e;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #eceee7;
+}
+
+.documento {
+  align-items: center;
+  font-size: 12.5px;
+  padding: 8px 0;
+  border-bottom: 1px solid #eceee7;
+}
+
+.mono {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+}
+
+.gris {
+  color: #5d6b5f;
+}
+
+.nombre {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.estado {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.punto {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e8b53a;
+}
+
+.estado-texto {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: #8a6a1f;
+}
+
+.aprobado .punto {
+  background: #4c7a2f;
+}
+
+.aprobado .estado-texto {
+  color: #4c7a2f;
+}
+
+.subir {
+  background: #f4f5f0;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.subir-titulo {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.tipos {
+  display: flex;
+  gap: 7px;
+  margin-top: 8px;
+}
+
+.tipo {
+  font: inherit;
+  font-size: 12px;
+  padding: 6px 13px;
+  border-radius: 20px;
+  cursor: pointer;
+  background: #ffffff;
+  color: #3d4a3f;
+  border: 1px solid #d8dcd2;
+}
+
+.tipo.activo {
+  background: #16281f;
+  color: #ffffff;
+  border-color: #16281f;
+}
+
+.archivo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.en-linea {
+  display: inline-block;
+}
+
+.oculto {
+  display: none;
+}
+
+.nombre-archivo {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #3d4a3f;
+}
+
+.pista {
+  font-size: 12px;
+  color: #8b9186;
+}
+
+.error {
+  font-size: 12px;
+  color: #b1573f;
+}

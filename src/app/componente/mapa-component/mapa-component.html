@@ -1,0 +1,93 @@
+<div class="pantalla">
+  <app-mapa-lista-component
+    [vistas]="vistas" [filtros]="filtroChips" [tiposPunto]="tipoChips" [esPuntos]="mapView === 'puntos'"
+    [anuncios]="anuncios" [puntos]="puntos" [resultado]="resultado" [vacio]="vacio" [mensajeVacio]="mensajeVacio" [error]="error"
+    (chip)="onChip($event)" (limpiar)="clearMapFilters()" (reclamar)="claim($event)" (chat)="goChats()" (punto)="openPoint($event)" />
+
+  <div class="mapa">
+    <svg viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid slice" class="lienzo">
+      <rect x="0" y="0" width="1000" height="700" fill="#e7ebe1"></rect>
+      <rect x="40" y="40" width="240" height="180" rx="6" fill="#dde3d5"></rect>
+      <rect x="320" y="40" width="300" height="120" rx="6" fill="#dde3d5"></rect>
+      <rect x="660" y="40" width="300" height="200" rx="6" fill="#d5e0cb"></rect>
+      <rect x="40" y="260" width="180" height="220" rx="6" fill="#dde3d5"></rect>
+      <rect x="260" y="200" width="360" height="280" rx="6" fill="#dde3d5"></rect>
+      <rect x="660" y="280" width="300" height="200" rx="6" fill="#dde3d5"></rect>
+      <rect x="40" y="520" width="580" height="140" rx="6" fill="#dde3d5"></rect>
+      <rect x="660" y="520" width="300" height="140" rx="6" fill="#d5e0cb"></rect>
+      <path d="M0 240 H1000 M0 500 H1000 M240 0 V700 M640 0 V700" stroke="#ffffff" stroke-width="14"></path>
+      <path d="M0 130 H1000 M0 380 H1000 M440 0 V700 M840 0 V700" stroke="#f3f5ef" stroke-width="8"></path>
+    </svg>
+
+    <div class="herramientas">
+      <button type="button" class="flow-button pequeno" (click)="optimizeRoute()" [attr.aria-pressed]="optimized">Optimizar ruta</button>
+      <button type="button" class="flow-button pequeno" (click)="guardarAbierto = true">Guardar ruta</button>
+      <button type="button" class="flow-button pequeno" (click)="openSaved()">Rutas guardadas</button>
+    </div>
+
+    <div aria-label="Pines del mapa" class="pines">
+      <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-label="Trazo de la ruta activa" class="trazo">
+        <polyline [attr.points]="routeTrace" fill="none" stroke="#16281f" stroke-width="8" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"></polyline>
+        <polyline [attr.points]="routeTrace" fill="none" stroke="#a3d24a" stroke-width="4" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"></polyline>
+      </svg>
+      <div class="tu">● TÚ</div>
+      @for (a of adPins; track a.id) {
+        <button type="button" class="map-button pin-anuncio" [class.reclamado]="a.claimed" [class.destacado]="a.featured && !a.claimed" [attr.data-ad-pin]="a.id" (click)="showAd(a.id)" [title]="a.pinLabel" [attr.aria-label]="a.pinLabel" [style.left.%]="a.x" [style.top.%]="a.y">
+          <span class="pin-icono" [style.color]="a.color"><app-icono-component [nombre]="a.mat" /></span>
+          <span class="pin-kg">{{ a.kg }}</span>
+          @if (a.stopNumber > 0) { <span class="stop-number">{{ a.stopNumber }}</span> }
+        </button>
+      }
+      @for (p of pointPins; track p.id) {
+        <button type="button" class="map-button pin-punto" [class.seleccionado]="p.selected" [class.en-ruta]="p.inRoute && !p.selected" [attr.data-point-pin]="p.id" [attr.data-point-type]="p.type" [title]="p.pinLabel" [attr.aria-label]="p.pinLabel" (click)="openPoint(p.id)" [style.left.%]="p.x" [style.top.%]="p.y">
+          <span [class]="'point-symbol point-' + p.type"><span class="icono-16"><app-icono-component [nombre]="p.type" /></span></span>
+          @if (p.stopNumber > 0) { <span class="stop-number">{{ p.stopNumber }}</span> }
+        </button>
+      }
+    </div>
+
+    <app-ruta-activa-component
+      [kg]="routeKg()" [meta]="routeMeta()" [distancia]="stats.distanceLabel" [minutos]="stats.minutes" [aviso]="routeNotice"
+      [paradas]="paradas" [puedeEscanear]="routeCanScan()"
+      (abrirParada)="openStop($event)" (quitarParada)="removeStop($event)" (escanear)="openScanner()" (chat)="routeChat()" />
+
+    <div class="nuevos">
+      <div>
+        <div class="kicker">ANUNCIOS NUEVOS</div>
+        <div class="nuevos-titulo">Publicados en los últimos 30 min</div>
+        <div class="nuevos-detalle">Vidrio mixto · Latas de aluminio</div>
+      </div>
+      <div class="derecha">
+        <div class="nuevos-num">2</div>
+        <div class="nuevos-detalle">sin reclamar</div>
+      </div>
+    </div>
+
+    <div role="group" aria-label="Tipos visibles en el mapa" class="leyenda">
+      @for (l of leyenda; track l.type) {
+        <button type="button" class="map-button leyenda-item" [class.oculto]="!l.active" [attr.data-legend]="l.type" [attr.aria-pressed]="l.active" (click)="toggleLegend(l.type)">
+          <span [class]="'point-symbol point-' + l.type + ' leyenda-simbolo'"></span>{{ l.label }}
+        </button>
+      }
+      <div class="leyenda-anuncio"><span class="leyenda-caja"></span>Anuncio de material · kg</div>
+    </div>
+
+    @if (savedPanel) {
+      <app-rutas-guardadas-component [rutas]="rutasGuardadas" (cerrar)="savedPanel = false" (cargar)="loadSavedRoute($event)" (eliminar)="removeSavedRoute($event)" />
+    }
+
+    @if (puntoDetalle) {
+      <app-punto-detalle-component [punto]="puntoDetalle" (cerrar)="closePoint()" (agregar)="addToRoute($event)" />
+    }
+  </div>
+</div>
+
+@if (guardarAbierto) {
+  <app-guardar-ruta-dialog-component [resumen]="routeMeta() + ' · ' + stats.distanceLabel + ' · ' + stats.minutes + ' min'" [sinParadas]="!paradas.length" (guardar)="saveRoute($event)" (cerrar)="guardarAbierto = false" />
+}
+@if (entregaEscaner) {
+  <app-escaner-dialog-component [entrega]="entregaEscaner" (confirmado)="onConfirmado($event)" (cerrar)="entregaEscaner = null" />
+}
+@if (entregaConfirmada) {
+  <app-valorar-dialog-component [entrega]="entregaConfirmada" [esGenerador]="false" (cerrar)="entregaConfirmada = null" />
+}

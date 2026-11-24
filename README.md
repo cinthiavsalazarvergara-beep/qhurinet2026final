@@ -5,7 +5,7 @@ Consola web para generadores y recicladores. Conectada al back Spring Boot (`/ap
 ```bash
 npm ci
 npm start        # http://localhost:4200  (API: environment.development.ts → http://localhost:8088/api/v1)
-npm test         # 99 pruebas, sin red
+npm test         # 127 pruebas (Karma + Jasmine, Edge/Chrome headless), sin red
 npm run build    # usa environment.ts (apiUrl: /api/v1)
 ```
 

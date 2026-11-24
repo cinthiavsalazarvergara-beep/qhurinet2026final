@@ -1,0 +1,18 @@
+<div class="flow-overlay">
+  <form role="dialog" class="dialogo" [formGroup]="form" cdkTrapFocus [cdkTrapFocusAutoCapture]="true" aria-modal="true" aria-label="Confirmar entrega" (keydown.escape)="cerrar.emit()" (ngSubmit)="confirmar()">
+    <div class="cabecera">
+      <div>
+        <div class="kicker">CONFIRMAR ENTREGA</div>
+        <div class="titulo">{{ titulo() }}</div>
+      </div>
+      <button type="button" class="cerrar" title="Cerrar" aria-label="Cerrar" (click)="cerrar.emit()">×</button>
+    </div>
+    <div class="cuerpo">
+      <div class="texto">Pide al generador el código de entrega (lo ve en su chat de esta recolección) e ingrésalo. Al confirmar se registra la entrega.</div>
+      <label class="etiqueta">Código de entrega<input class="flow-field" aria-label="Código de entrega" formControlName="codigo" (input)="error = ''" placeholder="Código de entrega" maxlength="36" autocomplete="off" spellcheck="false" /></label>
+      @if (error) { <div role="alert" class="error">{{ error }}</div> }
+      @if (bloqueada()) { <div role="status" class="aviso">Esta entrega ya está {{ entrega.state }}.</div> }
+      <button type="submit" class="flow-button confirmar" [disabled]="bloqueada()">Confirmar entrega</button>
+    </div>
+  </form>
+</div>

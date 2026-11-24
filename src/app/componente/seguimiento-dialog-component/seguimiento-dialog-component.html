@@ -1,0 +1,23 @@
+<div class="flow-overlay">
+  <div class="flow-dialog dialogo" cdkTrapFocus [cdkTrapFocusAutoCapture]="true" role="dialog" aria-modal="true" aria-label="Seguimiento del recolector" (keydown.escape)="cerrar.emit()">
+    <div class="cabecera">
+      <div><div class="flow-heading">SEGUIMIENTO DEL RECOLECTOR</div><div class="titulo">{{ entrega.person }}</div></div>
+      <button type="button" class="flow-button" aria-label="Cerrar seguimiento" (click)="cerrar.emit()">×</button>
+    </div>
+    <div class="estado">
+      <div><div role="status" class="negrita">{{ estado() }}</div><div class="destino">Destino: {{ entrega.address }}</div></div>
+      <div class="eta"><div class="eta-num">{{ eta() }} min</div><div class="eta-texto">Llegada estimada</div></div>
+    </div>
+    <div class="mapa">
+      <svg viewBox="0 0 1000 700" preserveAspectRatio="none" class="lienzo">
+        <rect x="40" y="40" width="200" height="180" rx="6" fill="#dde3d5"></rect><rect x="300" y="40" width="300" height="180" rx="6" fill="#dde3d5"></rect><rect x="660" y="40" width="300" height="200" rx="6" fill="#d5e0cb"></rect>
+        <rect x="40" y="280" width="200" height="360" rx="6" fill="#dde3d5"></rect><rect x="300" y="280" width="300" height="360" rx="6" fill="#dde3d5"></rect><rect x="660" y="280" width="300" height="360" rx="6" fill="#dde3d5"></rect>
+        <path d="M0 240 H1000 M0 500 H1000 M260 0 V700 M640 0 V700" stroke="#ffffff" stroke-width="14"></path>
+        <path d="M150 560 L800 175" stroke="#16281f" stroke-width="9" fill="none"></path><path d="M150 560 L800 175" stroke="#a3d24a" stroke-width="5" fill="none"></path>
+      </svg>
+      <div class="destino-pin">Tu dirección</div>
+      <div aria-label="Posición del recolector" class="marcador" [style.left.%]="marcadorLeft()" [style.top.%]="marcadorTop()"><span class="marcador-icono"><app-icono-component nombre="perfil" /></span></div>
+    </div>
+    <div class="nota">Ubicación y tiempos simulados para la demostración.</div>
+  </div>
+</div>

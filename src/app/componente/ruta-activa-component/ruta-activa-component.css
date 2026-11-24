@@ -1,0 +1,158 @@
+:host {
+  position: absolute;
+  right: 18px;
+  top: 18px;
+  width: 320px;
+  max-height: calc(100% - 170px);
+  overflow-y: auto;
+  background: #ffffff;
+  border: 1px solid #e2e5dc;
+  border-radius: 14px;
+}
+
+.cabecera {
+  background: #16281f;
+  padding: 14px 18px;
+}
+
+.kicker {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: #a3d24a;
+  letter-spacing: 0.08em;
+}
+
+.cifras {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.kg {
+  font-size: 26px;
+  font-weight: 600;
+  color: #ffffff;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.meta {
+  font-size: 12px;
+  color: #c3d3c6;
+}
+
+.cuerpo {
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.distancia {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+}
+
+.aviso {
+  font-size: 11px;
+  color: #4c7a2f;
+  line-height: 1.5;
+}
+
+.vacia {
+  font-size: 12px;
+  color: #5d6b5f;
+}
+
+.parada {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  border-top: 1px solid #eceee7;
+  padding-top: 10px;
+}
+
+.numero {
+  background: #eef2e4;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  flex: none;
+  text-align: center;
+  padding-top: 4px;
+  font: 11px 'IBM Plex Mono', monospace;
+}
+
+.parada-texto {
+  flex: 1;
+}
+
+.parada-nombre {
+  border: none;
+  padding: 0;
+  background: transparent;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.parada-detalle {
+  font-size: 11px;
+  color: #5d6b5f;
+  margin-top: 3px;
+}
+
+.quitar {
+  padding: 3px 6px;
+}
+
+.separador {
+  height: 1px;
+  background: #eceee7;
+}
+
+.botones {
+  display: flex;
+  gap: 8px;
+}
+
+.escanear {
+  flex: 1;
+  font: inherit;
+  background: #16281f;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  padding: 11px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.escanear svg {
+  width: 16px;
+  height: 16px;
+}
+
+.chat {
+  background: #ffffff;
+  border: 1px solid #d8dcd2;
+  padding: 11px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.chat svg {
+  width: 17px;
+  height: 17px;
+  color: #16281f;
+}

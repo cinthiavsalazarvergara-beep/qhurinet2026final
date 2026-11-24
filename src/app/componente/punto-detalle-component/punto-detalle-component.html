@@ -1,0 +1,22 @@
+<aside aria-label="Detalle del punto de reciclaje" class="panel" (keydown.escape)="cerrar.emit()">
+  <div class="cabecera">
+    <div class="kicker">PUNTO DE RECICLAJE</div>
+    <button type="button" id="close-point" class="map-button cerrar" aria-label="Cerrar detalle del punto" (click)="cerrar.emit()">×</button>
+  </div>
+  <div>
+    <div [class]="'point-symbol point-' + punto.type + ' simbolo'"><div class="icono-16"><app-icono-component [nombre]="punto.type" /></div></div>
+    <div class="nombre">{{ punto.name }}</div>
+    <div class="tipo">{{ punto.typeLabel }}</div>
+  </div>
+  <div class="datos">
+    <div><div class="negrita">Dirección</div><div class="gris">{{ punto.address }} · {{ punto.district }}</div></div>
+    <div><div class="negrita">Horario de atención</div><div class="gris">{{ punto.hours }}</div></div>
+    <div class="fila"><span>Calificación promedio</span><span class="mono">★ {{ punto.ratingLabel }} / 5</span></div>
+  </div>
+  <div>
+    <div class="kicker">MATERIALES ACEPTADOS</div>
+    <div class="etiquetas">@for (m of punto.tags; track m) {<span class="material-tag">{{ m }}</span>}</div>
+  </div>
+  <button type="button" class="map-button agregar" [class.en-ruta]="punto.inRoute" [attr.aria-disabled]="punto.inRoute" (click)="agregar.emit(punto.id)">{{ punto.routeLabel }}</button>
+  <div role="status" class="pista">{{ punto.routeHint }}</div>
+</aside>

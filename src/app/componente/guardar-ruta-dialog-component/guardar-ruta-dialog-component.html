@@ -1,0 +1,10 @@
+<div class="flow-overlay">
+  <form class="flow-dialog" [formGroup]="form" cdkTrapFocus [cdkTrapFocusAutoCapture]="true" role="dialog" aria-modal="true" aria-label="Guardar ruta" (keydown.escape)="cerrar.emit()" (ngSubmit)="confirmar()">
+    <div class="cabecera"><span class="titulo">Guardar ruta</span><button type="button" class="flow-button" aria-label="Cerrar diálogo" (click)="cerrar.emit()">×</button></div>
+    <div class="resumen">{{ resumen }}</div>
+    <label class="etiqueta">Nombre de la ruta<input class="flow-field" aria-label="Nombre de la ruta" formControlName="nombre" (input)="error = ''" maxlength="60" placeholder="Ej. Recojos del sábado" /></label>
+    <label class="etiqueta">Descripción (opcional)<textarea class="flow-field" aria-label="Descripción (opcional)" formControlName="descripcion" maxlength="240" rows="3"></textarea></label>
+    @if (error) { <div role="alert" class="error">{{ error }}</div> }
+    <div class="botones"><button type="submit" class="flow-button flow-primary">Confirmar guardado</button><button type="button" class="flow-button" (click)="cerrar.emit()">Volver</button></div>
+  </form>
+</div>

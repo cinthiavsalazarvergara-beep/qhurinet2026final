@@ -1,0 +1,76 @@
+<div class="tabla">
+  <div role="tablist" aria-label="Estado de las entregas" class="pestanas">
+    @for (t of pestanas; track t.key) {
+      <button type="button" role="tab" class="pestana" [class.activa]="pestana === t.key" [attr.aria-selected]="pestana === t.key" [attr.data-tab]="t.key" (click)="cambiarPestana(t.key)">{{ t.label }} · {{ t.count }}</button>
+    }
+  </div>
+
+  <div class="fila-grid encabezado">
+    <div>CANT.</div>
+    <div>{{ modo === 'recojos' ? 'MATERIAL / LUGAR' : 'MATERIAL / PUBLICADO' }}</div>
+    <div>{{ modo === 'recojos' ? 'CONTRAPARTE' : 'RECICLADOR' }}</div>
+    <div>VENTANA</div>
+    <div>ESTADO</div>
+    <div></div>
+  </div>
+
+  @if (!visibles.length) {
+    <div role="status" class="vacio">{{ textoVacio() }}</div>
+  }
+  @for (p of visibles; track p.id) {
+    <div class="fila-grid fila" [attr.data-delivery-row]="p.id" [style.background]="p.rowBg">
+      <div class="kg">{{ p.kg }}</div>
+      <div>
+        <div class="material">{{ p.material }}</div>
+        @if (p.priority) { <span class="material-tag prioritaria">★ Prioritaria</span> }
+        <div class="lugar">{{ modo === 'recojos' ? p.place : p.posted }}</div>
+      </div>
+      <div class="persona" [style.color]="modo === 'anuncios' ? (p.personFg || '#3d4a3f') : '#3d4a3f'">{{ p.person }}</div>
+      <div class="ventana">{{ p.window }}</div>
+      <div>
+        <div class="estado" [style.background]="p.stateBg" [style.color]="p.stateFg">{{ p.state }}</div>
+      </div>
+      <div class="acciones">
+        <button type="button" class="icono-boton" (click)="emitir('chat', p.id)" title="Abrir chat" aria-label="Abrir chat">
+          <svg viewBox="0 0 24 24"><path d="M3 5 H21 V16 H12 L7 20 V16 H3 Z" fill="none" stroke="currentColor" stroke-width="2"></path></svg>
+        </button>
+        <!-- canRate solo es true en la vista del generador (publicaciones), por eso va fuera del bloque de recojos -->
+        @if (p.canRate) {
+          <button type="button" class="boton-valorar" (click)="emitir('valorar', p.id)" aria-label="Valorar al reciclador">Valorar</button>
+        }
+        @if (modo === 'recojos') {
+          @if (p.canScan) {
+            <button type="button" class="icono-boton" (click)="emitir('escanear', p.id)" title="Escanear QR de entrega" aria-label="Escanear QR de entrega">
+              <svg viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" fill="none" stroke="currentColor" stroke-width="2"></rect><rect x="14" y="4" width="6" height="6" fill="none" stroke="currentColor" stroke-width="2"></rect><rect x="4" y="14" width="6" height="6" fill="none" stroke="currentColor" stroke-width="2"></rect><path d="M14 14 H20 V20 H14 Z" fill="none" stroke="currentColor" stroke-width="2"></path></svg>
+            </button>
+          }
+        } @else {
+          <button type="button" class="icono-boton" title="Ver anuncio" aria-label="Ver anuncio">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2.5 12 C5 7.5 8.3 5.5 12 5.5 C15.7 5.5 19 7.5 21.5 12 C19 16.5 15.7 18.5 12 18.5 C8.3 18.5 5 16.5 2.5 12 Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          </button>
+        }
+        <button type="button" class="flow-button boton-menu" [attr.aria-label]="'Acciones de ' + p.id" [attr.aria-expanded]="menuFila === p.id" (click)="toggleMenu(p.id)">⋯</button>
+      </div>
+      @if (p.canCoordinate) {
+        <div class="fila-extra"><button type="button" class="flow-button flow-primary" (click)="emitir('coordinar', p.id)">Coordinar recolección</button><span class="nota">Acuerda el día y la franja con el generador para confirmarla.</span></div>
+      }
+      @if (p.canStartRoute) {
+        <div class="fila-extra"><button type="button" class="flow-button flow-primary" (click)="emitir('iniciar', p.id)">Iniciar recorrido</button><span class="nota">Al iniciar quedarás «En camino»: se habilitan el QR y el seguimiento.</span></div>
+      }
+      @if (p.canTrack) {
+        <div class="fila-completa"><button type="button" class="flow-button" (click)="emitir('seguir', p.id)">Seguir recolector</button></div>
+      }
+      @if (p.reason) {
+        <div class="fila-completa motivo">Motivo de cancelación: {{ p.reason }}</div>
+      }
+      @if (menuFila === p.id) {
+        <div role="group" class="fila-extra menu" [attr.aria-label]="'Acciones de la recolección ' + p.id">
+          <button type="button" class="flow-button" [disabled]="p.locked" (click)="emitir('reprogramar', p.id)">Reprogramar</button>
+          <button type="button" class="flow-button flow-danger" [disabled]="p.locked" (click)="emitir('cancelar', p.id)">Cancelar recolección</button>
+          <button type="button" class="flow-button" (click)="emitir('prioridad', p.id)" [attr.aria-pressed]="p.priority">{{ p.priorityLabel }}</button>
+          <span class="nota">{{ p.lockHint }}</span>
+        </div>
+      }
+    </div>
+  }
+</div>
