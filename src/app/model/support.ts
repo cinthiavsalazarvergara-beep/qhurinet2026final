@@ -28,17 +28,3 @@ export const ticketCategoryValue = (label: string): string =>
 
 export const PAY_OPTIONS = ['Sin pago', 'Yape', 'Efectivo'];
 
-// Sugerencia de material por palabras clave (local, sin IA): simula el clasificador del sistema.
-export class SuggestRule {
-  mat: string;
-  confidence: number;
-  keys: string[];
-}
-
-export const SUGGEST_RULES: SuggestRule[] = [
-  { mat: 'carton', confidence: 92, keys: ['carton', 'caja', 'cajas', 'corrugado'] },
-  { mat: 'pet', confidence: 90, keys: ['botella', 'botellas', 'pet', 'gaseosa'] },
-  { mat: 'vidrio', confidence: 91, keys: ['vidrio', 'frasco', 'frascos', 'vino', 'cerveza'] },
-  { mat: 'metal', confidence: 86, keys: ['lata', 'latas', 'metal', 'aluminio', 'fierro', 'chatarra'] },
-  { mat: 'plastico', confidence: 85, keys: ['plastico', 'bolsa', 'bolsas', 'envase', 'envases', 'tapa', 'tapas'] },
-];

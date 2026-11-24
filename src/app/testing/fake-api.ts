@@ -74,6 +74,23 @@ export class FakeApi {
   documents() { return of<DocumentoVerificacionDTO[]>([]); }
   uploadDocument(tipo: string) { return of({ id: 1, tipo, urlArchivo: '/d.pdf', estado: 'aprobado', fechaSubida: iso('2030-01-01') }); }
   categories() { return of(this.categoriesList); }
+  /** Simula Gemini: solo para pruebas (la clasificación real la hace el back). */
+  classify(descripcion: string | null) {
+    const t = (descripcion ?? '').toLowerCase();
+    const nombre = t.includes('caja') ? 'cartón' : t.includes('botella') ? 'PET' : null;
+    const cat = nombre ? this.categoriesList.find((c) => c.nombre === nombre) : undefined;
+    return of(cat
+      ? { categoriaMaterialId: cat.id, categoriaMaterialNombre: cat.nombre, confianza: 0.95 }
+      : { categoriaMaterialId: null, categoriaMaterialNombre: null, confianza: null });
+  }
+  /** Simula OSRM: devuelve el orden invertido, para comprobar que el front usa la respuesta. */
+  optimize(body: { puntosIds: number[] }) {
+    return of({
+      paradas: [...body.puntosIds].reverse().map((id, i) => ({ puntoReciclajeId: id, orden: i + 1 })),
+      distanciaTotalKm: 14.43,
+      tiempoEstimadoMin: 26,
+    });
+  }
   points() { return of<PuntoReciclajeDTO[]>([{ id: 1, nombre: 'Punto Verde', tipo: 'acopio', direccion: 'Jr. Prueba 1', distrito: 'Lince', latitud: -12.08, longitud: -77.03, horarioAtencion: '8-18', calificacionPromedio: 4.2, materiales: [{ id: 1, nombre: 'cartón', unidadMedidaDefault: 'kg' }] }]); }
 
   publications() { return of(this.pubs.filter((p) => p.estado === 'disponible')); }

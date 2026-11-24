@@ -73,11 +73,22 @@ describe('MapaComponent', () => {
     expect(ruta.stops).not.toContain('p1');
   });
 
-  it('optimizar la ruta marca el estado y deja aviso', () => {
+  it('optimizar la ruta llama al back (OSRM) y usa su orden para los puntos', () => {
     setup();
+    ruta.stops = ['p1', 'p2', 'a1'];
     c.optimizeRoute();
+    expect(api.log).toContain('POST /routes/optimize');
     expect(c.optimized).toBeTrue();
-    expect(c.routeNotice).toContain('optimizada');
+    expect(c.routeNotice).toContain('OSRM');
+    expect(ruta.stops).toEqual(['p2', 'p1', 'a1']); // el back devuelve el orden invertido en la FakeApi
+  });
+
+  it('optimizar sin puntos de reciclaje no llama al back y lo avisa', () => {
+    setup();
+    ruta.stops = ['a1', 'a2'];
+    c.optimizeRoute();
+    expect(api.log).not.toContain('POST /routes/optimize');
+    expect(c.routeNotice).toContain('anuncios');
   });
 
   it('filtros del mapa: material y buscador de la cabecera', () => {

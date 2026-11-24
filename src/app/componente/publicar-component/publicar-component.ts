@@ -1,24 +1,24 @@
 import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { catchError, debounceTime, map, of, Subject, Subscription, switchMap } from 'rxjs';
 import { ErrorStateMatcher, provideNativeDateAdapter } from '@angular/material/core';
 import { MatButton } from '@angular/material/button';
 import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from '@angular/material/datepicker';
 import { MatFormField, MatPrefix, MatSuffix } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatOption, MatSelect } from '@angular/material/select';
-import { CategoriaMaterialDTO } from '../../model/categoria-material';
+import { CategoriaMaterialDTO, ClasificacionMaterialDTO } from '../../model/categoria-material';
 import { CrearPublicacionDTO } from '../../model/publicacion';
 import { MAT_ORDER, MATERIALS } from '../../model/material';
 import { SLOT_LABELS, SLOT_OPTIONS, TIME_SLOTS } from '../../model/delivery';
-import { PAY_OPTIONS, SUGGEST_RULES } from '../../model/support';
+import { PAY_OPTIONS } from '../../model/support';
 import { PublicacionService } from '../../services/publicacion-service';
 import { CategoriaMaterialService } from '../../services/categoria-material-service';
 import { PerfilService } from '../../services/perfil-service';
 import { LoginService } from '../../services/login-service';
 import { matKey } from '../../core/mappers';
-import { isoDate, normalizeSearch, readFile, todayDate } from '../../core/utilidades';
+import { isoDate, readFile, todayDate } from '../../core/utilidades';
 import { errorMessage } from '../../core/http-error';
 import { VistaPreviaAnuncioComponent } from '../vista-previa-anuncio-component/vista-previa-anuncio-component';
 
@@ -98,6 +98,10 @@ export class PublicarComponent implements OnInit, OnDestroy {
   draftNotice = '';
   dismissedSuggestion = '';
   nombre = '';
+  /** Última clasificación de Gemini para la nota o la foto (null si no hay coincidencia). */
+  private clasificacion: Sugerencia | null = null;
+  private photoFile: File | null = null;
+  private readonly clasificar$ = new Subject<void>();
 
   // Material marca el campo en rojo cuando hay error de validación.
   readonly qtyMatcher: ErrorStateMatcher = { isErrorState: () => !!this.errores['qty'] };
@@ -125,6 +129,13 @@ export class PublicarComponent implements OnInit, OnDestroy {
       error: (err) => console.error('Error cargando categorías', err),
     });
     this.suscripcion = this.perfilService.getPerfilCambio().subscribe((p) => (this.nombre = p.nombreCompleto));
+    // Clasifica con Gemini cuando el generador deja de escribir (no en cada tecla).
+    this.suscripcion.add(
+      this.clasificar$
+        .pipe(debounceTime(700), switchMap(() => this.clasificarEntrada()))
+        .subscribe((s) => (this.clasificacion = s)),
+    );
+    this.suscripcion.add(this.form.get('note')?.valueChanges.subscribe(() => this.clasificar$.next()));
     this.perfilService.actualizarPerfil();
     this.restoreDraft();
   }
@@ -160,16 +171,20 @@ export class PublicarComponent implements OnInit, OnDestroy {
   }
 
   onPhoto(event: Event): void {
-    readFile(event.target as HTMLInputElement, (name, url) => {
+    readFile(event.target as HTMLInputElement, (name, url, file) => {
       this.photo = url;
       this.photoName = name;
+      this.photoFile = file;
       this.dismissedSuggestion = '';
+      this.clasificar$.next();
     });
   }
 
   removePhoto(): void {
     this.photo = '';
     this.photoName = '';
+    this.photoFile = null;
+    this.clasificar$.next();
   }
 
   // ---- Valores derivados
@@ -215,16 +230,34 @@ export class PublicarComponent implements OnInit, OnDestroy {
     return MAT_ORDER.map((k) => ({ key: k, label: MATERIALS[k].label, active: !!this.materials[k] }));
   }
 
-  /** Sugerencia local por palabras clave en la nota o el nombre de la foto (no usa IA). */
+  /** Sugerencia de Gemini para la nota o la foto, salvo que el material ya esté elegido o se haya rechazado. */
   sugerencia(): Sugerencia | null {
-    const source = normalizeSearch(this.nota() + ' ' + this.photoName);
-    if (!source.trim()) return null;
-    const origin = this.photoName ? 'foto' : 'nota';
-    const rule = SUGGEST_RULES.find((r) => r.keys.some((k) => source.includes(k)) && !this.materials[r.mat] && this.dismissedSuggestion !== r.mat + ':' + origin);
-    if (!rule) return null;
+    const s = this.clasificacion;
+    if (!s || this.materials[s.mat] || this.dismissedSuggestion === s.key) return null;
+    return s;
+  }
+
+  /** Llama a POST /materials/classify. Si falla o no hay coincidencia, no sugiere nada y no bloquea publicar. */
+  private clasificarEntrada() {
+    const texto = this.nota().trim();
+    if (!texto && !this.photoFile) return of(null);
+    return this.categoriaService.clasificar(texto, this.photoFile).pipe(
+      map((r) => this.aSugerencia(r)),
+      catchError(() => of(null)),
+    );
+  }
+
+  /** Traduce la categoría del backend al material del formulario. Solo acepta categorías del catálogo conocido. */
+  private aSugerencia(r: ClasificacionMaterialDTO): Sugerencia | null {
+    if (r.categoriaMaterialId == null || r.confianza == null) return null;
+    const categoria = this.categorias.find((c) => c.id === r.categoriaMaterialId);
+    if (!categoria) return null;
+    const mat = matKey(categoria.nombre);
+    if (!MATERIALS[mat]) return null;
+    const origen = this.photoFile ? 'foto' : 'nota';
     return {
-      key: rule.mat + ':' + origin, mat: rule.mat, label: MATERIALS[rule.mat].label,
-      confidence: rule.confidence + (this.photoName ? 4 : 0), source: this.photoName ? 'la foto' : 'la nota',
+      key: mat + ':' + origen, mat, label: MATERIALS[mat].label,
+      confidence: Math.round(r.confianza * 100), source: this.photoFile ? 'la foto' : 'la nota',
     };
   }
 

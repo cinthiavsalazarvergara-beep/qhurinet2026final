@@ -45,6 +45,8 @@ function route(api: FakeApi, req: HttpRequest<unknown>, path: string): Observabl
   if (is('GET', /^\/users\/(\d+)\/reputation$/)) return api.reputation(id(/^\/users\/(\d+)/));
   // Catálogos
   if (is('GET', /^\/material-categories$/)) return api.categories();
+  if (is('POST', /^\/materials\/classify$/)) return api.classify((req.body as unknown as FormData).get('descripcion') as string | null);
+  if (is('POST', /^\/routes\/optimize$/)) return api.optimize(b as unknown as { puntosIds: number[] });
   if (is('GET', /^\/recycling-points$/)) return api.points();
   // Publicaciones
   if (is('GET', /^\/publications\/mine$/)) return api.myPublications();

@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { FakeApi } from '../../testing/fake-api';
 import { login, routeWith, testProviders } from '../../testing/test-config';
@@ -91,15 +91,23 @@ describe('PublicarComponent', () => {
     expect(api.calls).not.toContain('createPublication');
   });
 
-  it('la sugerencia por palabras clave propone y aplica un material', () => {
-    c.toggleMat('carton');
-    c.toggleMat('pet');
+  it('la clasificación con IA (Gemini) propone un material tras dejar de escribir y lo aplica', fakeAsync(() => {
+    c.toggleMat('pet'); // material distinto al que sugerirá la IA
     c.form.patchValue({ note: 'Son varias cajas de cartón' });
+    tick(700); // debounce antes de llamar a POST /materials/classify
     const s = c.sugerencia()!;
     expect(s.mat).toBe('carton');
+    expect(s.confidence).toBe(95);
     c.applySuggestion(s);
     expect(c.materials).toEqual({ carton: true });
-  });
+    expect(api.log).toContain('POST /materials/classify');
+  }));
+
+  it('sin coincidencia de Gemini no hay sugerencia', fakeAsync(() => {
+    c.form.patchValue({ note: 'el clima de mañana' });
+    tick(700);
+    expect(c.sugerencia()).toBeNull();
+  }));
 
   it('el borrador se guarda en este navegador y se restaura al volver', () => {
     llenar();

@@ -15,7 +15,7 @@ import { NotificacionService } from '../../services/notificacion-service';
 import { BusquedaService } from '../../services/busqueda-service';
 import { RutaService } from '../../services/ruta-service';
 import { ACTIVE_STATES, toAd, toLocation, toPickup, toPoint } from '../../core/mappers';
-import { locOf, optimizeStops, routeStats, RouteStats, validStops } from '../../core/ruta';
+import { locOf, routeStats, RouteStats, validStops } from '../../core/ruta';
 import { canScan } from '../../core/entregas';
 import { normalizeSearch } from '../../core/utilidades';
 import { errorMessage } from '../../core/http-error';
@@ -422,12 +422,39 @@ export class MapaComponent implements OnInit, OnDestroy {
     this.busquedaService.setTexto(ad ? ad.place.split(' · ')[0] : '');
   }
 
+  /**
+   * Ordena los puntos de reciclaje con OSRM (POST /routes/optimize). El back no optimiza anuncios:
+   * esas paradas se mantienen al final, en su orden.
+   */
   optimizeRoute(): void {
-    const habia = this.rutaService.stops.length;
-    this.rutaService.stops = optimizeStops(this.locations, this.rutaService.stops);
-    this.optimized = true;
-    this.routeNotice = habia ? 'Ruta optimizada por cercanía.' : 'Agrega paradas para optimizar la ruta.';
-    this.refrescar();
+    const paradas = this.rutaService.stops;
+    if (!paradas.length) {
+      this.routeNotice = 'Agrega paradas para optimizar la ruta.';
+      this.refrescar();
+      return;
+    }
+    const puntos = paradas.filter((s) => s.startsWith('p')).map((s) => Number(s.slice(1)));
+    const anuncios = paradas.filter((s) => !s.startsWith('p'));
+    if (!puntos.length) {
+      this.optimized = true;
+      this.routeNotice = 'Solo hay anuncios en la ruta: el servidor optimiza puntos de reciclaje; se mantiene su orden.';
+      this.refrescar();
+      return;
+    }
+    this.rutaService.optimizar(puntos).subscribe({
+      next: (r) => {
+        const orden = [...r.paradas].sort((a, b) => a.orden - b.orden).map((p) => 'p' + p.puntoReciclajeId);
+        this.rutaService.stops = [...orden, ...anuncios];
+        this.optimized = true;
+        const km = r.distanciaTotalKm.toFixed(1).replace('.', ',');
+        this.routeNotice = `Ruta optimizada con OSRM: ${km} km · ${r.tiempoEstimadoMin} min.` + (anuncios.length ? ' Los anuncios van al final.' : '');
+        this.refrescar();
+      },
+      error: () => {
+        this.routeNotice = 'No se pudo optimizar: el servicio de rutas no responde.';
+        this.refrescar();
+      },
+    });
   }
 
   saveRoute(datos: RutaNueva): void {
