@@ -1,0 +1,10 @@
+{
+  "framework": "angular",
+  "installCommand": "npm ci",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist/qhurinet-angular/browser",
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "http://100.61.34.159/api/:path*" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
